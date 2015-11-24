@@ -16,24 +16,34 @@ Android Studio, Github, Eclipse, SQL Server 2014 Management Studio
 
 #### 데이터베이스 구축
 
+개인 일정 등록, 삭제, 수정
+
 그룹 일정 등록, 삭제, 수정
+
+일정 데이터를 모든 플랫폼(Desktop, iPhone, Android Smartphone, Tablet, etc)에서 접근
 
 #### 연동
 
-애플리케이션과 데이터베이스 연동
+애플리케이션과 데이터베이스
 
-카카오톡, Facebook 연동
+카카오톡, Facebook 로그인
 
-### 기능
+카카오톡 링크
 
+Facebook의 다양한 기능
 
-#### 디자인
+기존 스마트폰 캘린더의 데이터 가져오기
 
-Application Design
+#### 기능
+
+일과 설정, 이벤트 설정
 
 개인 일정 Public / Private Option
 
+개인 일정 -> 그룹 일정, 그룹 일정 -> 개인 일정
 
 일정에 대한 Push Service, Alarm Service
 
-일정 데이터를 모든 플랫폼(Desktop, iPhone, Android Smartphone, Tablet, etc)에서 접근
+#### 디자인
+
+앱 디자인
