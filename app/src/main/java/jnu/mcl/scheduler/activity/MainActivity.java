@@ -18,8 +18,7 @@ import java.sql.Statement;
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.connector.DBConnector;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener  {
+public class MainActivity extends AppCompatActivity  {
 
     DBConnector dbConnector = DBConnector.getInstance();
     TextView textView, textView2;
@@ -41,7 +40,7 @@ public class MainActivity extends AppCompatActivity
         testButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ScheduleActivity.class);
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(intent);
             }
         });
@@ -64,8 +63,4 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        return false;
-    }
 }
