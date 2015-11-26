@@ -4,7 +4,7 @@
 Github Page : https://github.com/Wef2/Scheduler
 
 ## 개발 환경
-Android Studio, Github, Eclipse, SQL Server 2014 Management Studio
+Android Studio, Github, SQL Server 2014 Management Studio
 
 ## 소개
 
@@ -15,6 +15,12 @@ Android Studio, Github, Eclipse, SQL Server 2014 Management Studio
 ## To Do List
 
 #### 데이터베이스 구축
+
+가입 및 로그인
+
+프로필 수정
+
+친구 추가, 삭제
 
 개인 일정 등록, 삭제, 수정
 
@@ -46,4 +52,4 @@ Facebook의 다양한 기능
 
 #### 디자인
 
-앱 디자인
+아이콘
