@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -59,7 +60,12 @@ public class CalendarActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(navigationItemSelectedListener);
 
         calendarListView = (ListView) findViewById(R.id.calendarListView);
-
+        calendarListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                return false;
+            }
+        });
         getCalendarListFromDB();
     }
 
@@ -82,5 +88,9 @@ public class CalendarActivity extends AppCompatActivity {
             Toast.makeText(this, "DB Connection Error", Toast.LENGTH_SHORT).show();
             Log.w("Error connection", e);
         }
+    }
+
+    public void addCalendarToDB() {
+
     }
 }

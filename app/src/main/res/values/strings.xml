@@ -22,6 +22,7 @@
     <string name="title_activity_calendar">캘린더</string>
     <string name="title_activity_friend">친구</string>
     <string name="title_activity_settings">설정</string>
+    <string name="title_activity_add_calendar">캘린더 추가</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

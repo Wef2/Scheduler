@@ -18,8 +18,8 @@ import jnu.mcl.scheduler.model.FriendModel;
  */
 public class CalendarListAdapter extends ArrayAdapter<CalendarModel> {
 
-    public CalendarListAdapter(Context context, ArrayList<CalendarModel> friendModelList) {
-        super(context, 0, friendModelList);
+    public CalendarListAdapter(Context context, ArrayList<CalendarModel> calendarModelList) {
+        super(context, 0, calendarModelList);
     }
 
     @Override
@@ -30,8 +30,8 @@ public class CalendarListAdapter extends ArrayAdapter<CalendarModel> {
         }
         TextView calendarNameText = (TextView) view.findViewById(R.id.calendarNameText);
         TextView calendarDescriptionText = (TextView) view.findViewById(R.id.calendarDescriptionText);
-        calendarNameText.setText(calendarModel.getAdmin());
-        calendarDescriptionText.setText(calendarModel.getType());
+        calendarNameText.setText(calendarModel.getName());
+        calendarDescriptionText.setText(calendarModel.getDescription());
         return view;
     }
 
