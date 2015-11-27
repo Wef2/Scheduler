@@ -22,12 +22,14 @@ import java.util.ArrayList;
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
 import jnu.mcl.scheduler.connector.DBConnector;
+import jnu.mcl.scheduler.dialog.AddCalendarDialog;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
 import jnu.mcl.scheduler.model.CalendarModel;
+import jnu.mcl.scheduler.service.CalendarService;
 
 public class CalendarActivity extends AppCompatActivity {
 
-    private DBConnector dbConnector = DBConnector.getInstance();
+    private CalendarService calendarService = CalendarService.getInstance();
     private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
 
     private ArrayList<CalendarModel> calendarModelArrayList = new ArrayList<CalendarModel>();
@@ -45,8 +47,8 @@ public class CalendarActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                AddCalendarDialog addCalendarDialog = new AddCalendarDialog(CalendarActivity.this);
+                addCalendarDialog.show();
             }
         });
 
@@ -66,31 +68,9 @@ public class CalendarActivity extends AppCompatActivity {
                 return false;
             }
         });
-        getCalendarListFromDB();
-    }
 
-    public void getCalendarListFromDB() {
-        Connection conn = dbConnector.getConnection();
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet resultSet = stmt.executeQuery("select * from t_calendar");
-            while (resultSet.next()) {
-                CalendarModel calendarModel = new CalendarModel();
-                calendarModel.setNo(resultSet.getInt(1));
-                calendarModel.setName(resultSet.getString(2));
-                calendarModel.setDescription(resultSet.getString(5));
-                calendarModelArrayList.add(calendarModel);
-            }
-            calendarListAdapter = new CalendarListAdapter(this, calendarModelArrayList);
-            calendarListView.setAdapter(calendarListAdapter);
-            conn.close();
-        } catch (Exception e) {
-            Toast.makeText(this, "DB Connection Error", Toast.LENGTH_SHORT).show();
-            Log.w("Error connection", e);
-        }
-    }
-
-    public void addCalendarToDB() {
-
+        calendarModelArrayList = calendarService.getCalendarList();
+        calendarListAdapter = new CalendarListAdapter(this, calendarModelArrayList);
+        calendarListView.setAdapter(calendarListAdapter);
     }
 }

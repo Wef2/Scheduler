@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import jnu.mcl.scheduler.connector.DBConnector;
 import jnu.mcl.scheduler.model.UserModel;
@@ -27,6 +28,27 @@ public class UserService {
             newInstance = new UserService();
         }
         return newInstance;
+    }
+
+    public ArrayList<UserModel> getUserList(){
+        ArrayList<UserModel> userModelArrayList = new ArrayList<UserModel>();
+        Connection conn = dbConnector.getConnection();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet resultSet = stmt.executeQuery("select * from t_user");
+            while(resultSet.next()) {
+                UserModel userModel = new UserModel();
+                userModel.setNo(resultSet.getInt(1));
+                userModel.setId(resultSet.getString(2));
+                userModel.setNickname(resultSet.getString(3));
+                userModel.setDescription(resultSet.getString(5));
+                userModelArrayList.add(userModel);
+            }
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
+        return userModelArrayList;
     }
 
     public UserModel getUser(String id) {

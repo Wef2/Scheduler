@@ -22,13 +22,14 @@ import jnu.mcl.scheduler.adapter.UserListAdapter;
 import jnu.mcl.scheduler.connector.DBConnector;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
 import jnu.mcl.scheduler.model.UserModel;
+import jnu.mcl.scheduler.service.UserService;
 
 public class FriendActivity extends AppCompatActivity {
 
-    DBConnector dbConnector = DBConnector.getInstance();
+    private UserService userService = UserService.getInstance();
     private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
 
-    private ArrayList<UserModel> userModelArrayList = new ArrayList<UserModel>();
+    private ArrayList<UserModel> friendArrayList;
     private UserListAdapter userListAdapter;
     private ListView friendListView;
 
@@ -57,31 +58,10 @@ public class FriendActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(navigationItemSelectedListener);
 
         friendListView = (ListView) findViewById(R.id.friendListView);
-
-        getFriendListFromDB();
+        friendArrayList = userService.getUserList();
+        userListAdapter = new UserListAdapter(this, friendArrayList);
+        friendListView.setAdapter(userListAdapter);
     }
 
-
-    public void getFriendListFromDB() {
-        Connection conn = dbConnector.getConnection();
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet resultSet = stmt.executeQuery("select * from t_user");
-            while (resultSet.next()) {
-                UserModel userModel = new UserModel();
-                userModel.setNo(resultSet.getInt(1));
-                userModel.setNickname(resultSet.getString(2));
-                userModel.setDescription(resultSet.getString(4));
-
-                userModelArrayList.add(userModel);
-            }
-            userListAdapter = new UserListAdapter(this, userModelArrayList);
-            friendListView.setAdapter(userListAdapter);
-            conn.close();
-        } catch (Exception e) {
-            Toast.makeText(this, "DB Connection Error", Toast.LENGTH_SHORT).show();
-            Log.w("Error connection", e);
-        }
-    }
 
 }
