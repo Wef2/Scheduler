@@ -7,9 +7,9 @@
             android:icon="@drawable/ic_profile"
             android:title="프로필" />
         <item
-            android:id="@+id/nav_schedule"
-            android:icon="@drawable/ic_schedule"
-            android:title="일정" />
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/ic_calendar"
+            android:title="캘린더" />
         <item
             android:id="@+id/nav_friend"
             android:icon="@drawable/ic_friend"

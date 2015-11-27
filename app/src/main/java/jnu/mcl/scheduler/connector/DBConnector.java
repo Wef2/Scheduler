@@ -21,7 +21,7 @@ public class DBConnector {
         return newInstance;
     }
 
-    private String ip = "211.108.147.18:1433";
+    private String ip = "117.17.102.81:1034";
     private String className = "net.sourceforge.jtds.jdbc.Driver";
     private String dbName = "scheduler";
     private String userName = "sa";
@@ -35,7 +35,7 @@ public class DBConnector {
             Class.forName(className).newInstance();
             connection = DriverManager.getConnection("jdbc:jtds:sqlserver://"+ip+"/"+dbName, userName, password);
         } catch (Exception e) {
-            Log.w("Error connection", e);
+            Log.w("Connection Error", e);
         }
         return connection;
     }

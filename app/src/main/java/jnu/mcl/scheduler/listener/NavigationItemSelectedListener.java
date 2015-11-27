@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.activity.FriendActivity;
 import jnu.mcl.scheduler.activity.ProfileActivity;
-import jnu.mcl.scheduler.activity.ScheduleActivity;
+import jnu.mcl.scheduler.activity.CalendarActivity;
 import jnu.mcl.scheduler.activity.SettingsActivity;
 
 /**
@@ -39,9 +39,9 @@ public class NavigationItemSelectedListener implements NavigationView.OnNavigati
                 Log.w("Intent", "To Schedule Activity");
             }
 
-        } else if (id == R.id.nav_schedule) {
-            if (gotClass != ScheduleActivity.class) {
-                Intent intent = new Intent(this.activity, ScheduleActivity.class);
+        } else if (id == R.id.nav_calendar) {
+            if (gotClass != CalendarActivity.class) {
+                Intent intent = new Intent(this.activity, CalendarActivity.class);
                 this.activity.startActivity(intent);
                 Log.w("Intent", "To Schedule Activity");
             }

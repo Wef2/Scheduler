@@ -35,8 +35,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.ScheduleActivity"
-            android:label="@string/title_activity_schedule"
+            android:name=".activity.CalendarActivity"
+            android:label="@string/title_activity_calendar"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activity.FriendActivity"

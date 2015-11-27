@@ -19,7 +19,7 @@
 
     <!-- Strings related to Schedule Activity -->
     <string name="title_activity_profile">프로필</string>
-    <string name="title_activity_schedule">일정</string>
+    <string name="title_activity_calendar">캘린더</string>
     <string name="title_activity_friend">친구</string>
     <string name="title_activity_settings">설정</string>
 

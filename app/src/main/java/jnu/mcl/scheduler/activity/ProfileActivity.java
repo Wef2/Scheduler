@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -52,46 +53,18 @@ public class ProfileActivity extends AppCompatActivity {
         nicknameText = (TextView) findViewById(R.id.nicknameText);
         descriptionText = (TextView) findViewById(R.id.descriptionText);
         profileImage = (ImageView) findViewById(R.id.profileImage);
+        profileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
 
         getProfileFromDB();
     }
 
-    @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.test, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     public void getProfileFromDB() {
-        Connection conn = null;
+        Connection conn = dbConnector.getConnection();
         try {
-            conn = dbConnector.getConnection();
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery("select * from t_profile where no='1'");
             while (resultSet.next()) {
@@ -100,9 +73,9 @@ public class ProfileActivity extends AppCompatActivity {
             }
             conn.close();
         } catch (Exception e) {
+            Toast.makeText(this, "DB Connection Error", Toast.LENGTH_SHORT).show();
             Log.w("Error connection", e);
         }
-
     }
 
 }
