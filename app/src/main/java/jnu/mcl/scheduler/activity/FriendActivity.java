@@ -26,6 +26,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
+import jnu.mcl.scheduler.adapter.FriendListAdapter;
 import jnu.mcl.scheduler.connector.DBConnector;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
 import jnu.mcl.scheduler.model.FriendModel;
@@ -36,7 +37,7 @@ public class FriendActivity extends AppCompatActivity {
     private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
 
     private ArrayList<FriendModel> friendModelArrayList = new ArrayList<FriendModel>();
-    private ArrayAdapter<FriendModel> friendModelArrayAdapter;
+    private FriendListAdapter friendListAdapter;
     private ListView friendListView;
 
     @Override
@@ -83,8 +84,8 @@ public class FriendActivity extends AppCompatActivity {
 
                 friendModelArrayList.add(friendModel);
             }
-            friendModelArrayAdapter = new ArrayAdapter<FriendModel>(this, android.R.layout.simple_expandable_list_item_1, friendModelArrayList);
-            friendListView.setAdapter(friendModelArrayAdapter);
+            friendListAdapter = new FriendListAdapter(this, friendModelArrayList);
+            friendListView.setAdapter(friendListAdapter);
             conn.close();
         } catch (Exception e) {
             Toast.makeText(this, "DB Connection Error", Toast.LENGTH_SHORT).show();
