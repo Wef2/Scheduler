@@ -1,8 +1,6 @@
 package jnu.mcl.scheduler.activity;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,9 +16,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import jnu.mcl.scheduler.R;
-import jnu.mcl.scheduler.adapter.FriendListAdapter;
 import jnu.mcl.scheduler.connector.DBConnector;
-import jnu.mcl.scheduler.model.FriendModel;
 
 public class AddCalendarActivity extends AppCompatActivity {
 

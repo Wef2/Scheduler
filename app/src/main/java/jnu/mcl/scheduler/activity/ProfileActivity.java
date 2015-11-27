@@ -1,5 +1,6 @@
 package jnu.mcl.scheduler.activity;
 
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -25,10 +26,17 @@ import java.sql.Statement;
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.connector.DBConnector;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
+import jnu.mcl.scheduler.model.UserModel;
+import jnu.mcl.scheduler.service.UserService;
+import jnu.mcl.scheduler.util.SharedPreferenceUtil;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    DBConnector dbConnector = DBConnector.getInstance();
+    private UserService userService = UserService.getInstance();
+    private UserModel myProfile = null;
+
+    private String id, nickname;
+
     private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
 
     TextView nicknameText, descriptionText;
@@ -56,26 +64,16 @@ public class ProfileActivity extends AppCompatActivity {
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.w("Test1",myProfile.getDescription());
+                Log.w("Test2",myProfile.getId());
             }
         });
 
-        getProfileFromDB();
-    }
+        id = SharedPreferenceUtil.getSharedPreference(this, "id");
+        nickname = SharedPreferenceUtil.getSharedPreference(this, "nickname");
+        myProfile = userService.getUser(id, nickname);
 
-    public void getProfileFromDB() {
-        Connection conn = dbConnector.getConnection();
-        try {
-            Statement stmt = conn.createStatement();
-            ResultSet resultSet = stmt.executeQuery("select * from t_profile where no='1'");
-            while (resultSet.next()) {
-                nicknameText.setText(resultSet.getString(2));
-                descriptionText.setText(resultSet.getString(4));
-            }
-            conn.close();
-        } catch (Exception e) {
-            Toast.makeText(this, "DB Connection Error", Toast.LENGTH_SHORT).show();
-            Log.w("Error connection", e);
-        }
+        nicknameText.setText(myProfile.getNickname());
+        descriptionText.setText(myProfile.getDescription());
     }
-
 }

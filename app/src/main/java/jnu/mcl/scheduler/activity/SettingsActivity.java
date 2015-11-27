@@ -20,6 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

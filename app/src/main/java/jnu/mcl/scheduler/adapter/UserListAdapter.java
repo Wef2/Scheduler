@@ -10,27 +10,27 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
-import jnu.mcl.scheduler.model.FriendModel;
+import jnu.mcl.scheduler.model.UserModel;
 
 /**
  * Created by Kim on 2015-11-27.
  */
-public class FriendListAdapter extends ArrayAdapter<FriendModel> {
+public class UserListAdapter extends ArrayAdapter<UserModel> {
 
-    public FriendListAdapter(Context context, ArrayList<FriendModel> friendModelList) {
-        super(context, 0, friendModelList);
+    public UserListAdapter(Context context, ArrayList<UserModel> userModelList) {
+        super(context, 0, userModelList);
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        FriendModel friendModel = getItem(position);
+        UserModel userModel = getItem(position);
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.friend_item, parent, false);
         }
         TextView friendNameText = (TextView) view.findViewById(R.id.friendNameText);
         TextView friendDescriptionText = (TextView) view.findViewById(R.id.friendDescriptionText);
-        friendNameText.setText(friendModel.getNickname());
-        friendDescriptionText.setText(friendModel.getDescription());
+        friendNameText.setText(userModel.getNickname());
+        friendDescriptionText.setText(userModel.getDescription());
         return view;
     }
 

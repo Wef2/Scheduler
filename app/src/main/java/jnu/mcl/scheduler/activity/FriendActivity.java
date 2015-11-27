@@ -18,18 +18,18 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
-import jnu.mcl.scheduler.adapter.FriendListAdapter;
+import jnu.mcl.scheduler.adapter.UserListAdapter;
 import jnu.mcl.scheduler.connector.DBConnector;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
-import jnu.mcl.scheduler.model.FriendModel;
+import jnu.mcl.scheduler.model.UserModel;
 
 public class FriendActivity extends AppCompatActivity {
 
     DBConnector dbConnector = DBConnector.getInstance();
     private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
 
-    private ArrayList<FriendModel> friendModelArrayList = new ArrayList<FriendModel>();
-    private FriendListAdapter friendListAdapter;
+    private ArrayList<UserModel> userModelArrayList = new ArrayList<UserModel>();
+    private UserListAdapter userListAdapter;
     private ListView friendListView;
 
     @Override
@@ -66,17 +66,17 @@ public class FriendActivity extends AppCompatActivity {
         Connection conn = dbConnector.getConnection();
         try {
             Statement stmt = conn.createStatement();
-            ResultSet resultSet = stmt.executeQuery("select * from t_profile");
+            ResultSet resultSet = stmt.executeQuery("select * from t_user");
             while (resultSet.next()) {
-                FriendModel friendModel = new FriendModel();
-                friendModel.setNo(resultSet.getInt(1));
-                friendModel.setNickname(resultSet.getString(2));
-                friendModel.setDescription(resultSet.getString(4));
+                UserModel userModel = new UserModel();
+                userModel.setNo(resultSet.getInt(1));
+                userModel.setNickname(resultSet.getString(2));
+                userModel.setDescription(resultSet.getString(4));
 
-                friendModelArrayList.add(friendModel);
+                userModelArrayList.add(userModel);
             }
-            friendListAdapter = new FriendListAdapter(this, friendModelArrayList);
-            friendListView.setAdapter(friendListAdapter);
+            userListAdapter = new UserListAdapter(this, userModelArrayList);
+            friendListView.setAdapter(userListAdapter);
             conn.close();
         } catch (Exception e) {
             Toast.makeText(this, "DB Connection Error", Toast.LENGTH_SHORT).show();

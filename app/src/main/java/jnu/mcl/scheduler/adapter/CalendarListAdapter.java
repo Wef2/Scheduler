@@ -11,7 +11,6 @@ import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.model.CalendarModel;
-import jnu.mcl.scheduler.model.FriendModel;
 
 /**
  * Created by Kim on 2015-11-27.
