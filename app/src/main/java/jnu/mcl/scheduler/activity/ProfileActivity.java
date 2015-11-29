@@ -21,7 +21,7 @@ import jnu.mcl.scheduler.util.SharedPreferenceUtil;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    ModifyProfileDialog modifyProfileDialog;
+    private ModifyProfileDialog modifyProfileDialog;
     private TextView nicknameText, descriptionText;
     private ImageView profileImage;
     private Button modifyButton;
