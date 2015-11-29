@@ -47,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "ID, nickname을 다시 확인해주세요.", Toast.LENGTH_SHORT).show();
                 } else {
                     SharedPreferenceUtil.putSharedPreference(LoginActivity.this, "id", id);
-                    SharedPreferenceUtil.putSharedPreference(LoginActivity.this, "nickname", nickname);
                     Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
                     startActivity(intent);
                 }

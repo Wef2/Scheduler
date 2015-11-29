@@ -4,14 +4,15 @@
     android:layout_height="match_parent"
     android:background="#e8c447"
     android:orientation="vertical"
-    android:paddingLeft="100dp"
-    android:paddingRight="100dp"
     android:paddingTop="150dp">
 
+
     <ImageView
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_splash" />
+        android:background="@drawable/ic_splash"
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:id="@+id/textView"

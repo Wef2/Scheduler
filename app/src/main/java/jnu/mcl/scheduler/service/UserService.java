@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.connector.DBConnector;
+import jnu.mcl.scheduler.listener.UserServiceListener;
 import jnu.mcl.scheduler.model.UserModel;
 
 /**
@@ -16,11 +17,13 @@ import jnu.mcl.scheduler.model.UserModel;
  */
 public class UserService {
 
+    private ArrayList<UserServiceListener> userServiceListeners;
     private static UserService newInstance;
     private DBConnector dbConnector;
 
     private UserService() {
         dbConnector = DBConnector.getInstance();
+        userServiceListeners = new ArrayList<UserServiceListener>();
     }
 
     public static UserService getInstance() {
@@ -62,6 +65,7 @@ public class UserService {
                 userModel.setNo(resultSet.getInt(1));
                 userModel.setId(resultSet.getString(2));
                 userModel.setNickname(resultSet.getString(3));
+                userModel.setDescription(resultSet.getString(5));
             }
             conn.close();
         } catch (Exception e) {
@@ -101,6 +105,32 @@ public class UserService {
             conn.close();
         } catch (Exception e) {
             Log.w("Error connection", e);
+        }
+    }
+
+    public void updateUser(String id, String nickname, String description){
+        Connection conn = dbConnector.getConnection();
+        try {
+            String query = "update t_user set nickname='"+nickname+"', description='"+description+"' where id='"+id+"'";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.executeUpdate();
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
+
+        notifyUserUpdate();
+    }
+
+    public void addUserServiceListener(UserServiceListener userServiceListener){
+        if(!userServiceListeners.contains(userServiceListener)) {
+            userServiceListeners.add(userServiceListener);
+        }
+    }
+
+    public void notifyUserUpdate(){
+        for(UserServiceListener userServiceListener : userServiceListeners){
+            userServiceListener.onUserUpdate();
         }
     }
 

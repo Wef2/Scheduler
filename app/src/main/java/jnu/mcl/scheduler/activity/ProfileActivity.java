@@ -1,46 +1,35 @@
 package jnu.mcl.scheduler.activity;
 
-import android.content.SharedPreferences;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 
 import jnu.mcl.scheduler.R;
-import jnu.mcl.scheduler.connector.DBConnector;
+import jnu.mcl.scheduler.dialog.ModifyProfileDialog;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
+import jnu.mcl.scheduler.listener.UserServiceListener;
 import jnu.mcl.scheduler.model.UserModel;
 import jnu.mcl.scheduler.service.UserService;
 import jnu.mcl.scheduler.util.SharedPreferenceUtil;
 
 public class ProfileActivity extends AppCompatActivity {
 
+    ModifyProfileDialog modifyProfileDialog;
+    private TextView nicknameText, descriptionText;
+    private ImageView profileImage;
+    private Button modifyButton;
     private UserService userService = UserService.getInstance();
     private UserModel myProfile = null;
-
-    private String id, nickname;
-
+    private String id;
     private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
-
-    TextView nicknameText, descriptionText;
-    ImageView profileImage;
+    private UserServiceListener userServiceListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,19 +49,37 @@ public class ProfileActivity extends AppCompatActivity {
 
         nicknameText = (TextView) findViewById(R.id.nicknameText);
         descriptionText = (TextView) findViewById(R.id.descriptionText);
+        modifyButton = (Button) findViewById(R.id.modifyButton);
+        modifyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                modifyProfileDialog = new ModifyProfileDialog(ProfileActivity.this);
+                modifyProfileDialog.show();
+            }
+        });
+
         profileImage = (ImageView) findViewById(R.id.profileImage);
         profileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.w("Test1",myProfile.getDescription());
-                Log.w("Test2",myProfile.getId());
             }
         });
 
         id = SharedPreferenceUtil.getSharedPreference(this, "id");
-        nickname = SharedPreferenceUtil.getSharedPreference(this, "nickname");
-        myProfile = userService.getUser(id, nickname);
 
+        userServiceListener = new UserServiceListener() {
+            @Override
+            public void onUserUpdate() {
+                profileDataChanged();
+            }
+        };
+        userService.addUserServiceListener(userServiceListener);
+
+        profileDataChanged();
+    }
+
+    public void profileDataChanged() {
+        myProfile = userService.getUser(id);
         nicknameText.setText(myProfile.getNickname());
         descriptionText.setText(myProfile.getDescription());
     }

@@ -93,7 +93,7 @@ public class CalendarActivity extends AppCompatActivity implements QueryListener
         while (cursor.moveToNext()) {
             CalendarModel calendarModel = new CalendarModel();
             calendarModel.setId(cursor.getInt(0));
-            calendarModel.setName(cursor.getString(2));
+            calendarModel.setName(cursor.getString(4));
             calendarModelArrayList.add(calendarModel);
         }
         calendarListAdapter.notifyDataSetChanged();
