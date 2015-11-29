@@ -1,22 +1,21 @@
 package jnu.mcl.scheduler.fragment;
 
-import android.content.ContentResolver;
-import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
+import jnu.mcl.scheduler.activity.EventActivity;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
 import jnu.mcl.scheduler.handler.QueryHandler;
 import jnu.mcl.scheduler.listener.QueryListener;
@@ -45,7 +44,7 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
     private CalendarListAdapter personalCalendarListAdapter;
     private ListView personalCalendarListView;
 
-    public PersonalCalendarFragment(){
+    public PersonalCalendarFragment() {
     }
 
     public static PersonalCalendarFragment newInstance() {
@@ -62,7 +61,13 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
         personalCalendarListView = (ListView) rootView.findViewById(R.id.calendarListView);
         personalCalendarListAdapter = new CalendarListAdapter(getContext(), personalCalendarList);
         personalCalendarListView.setAdapter(personalCalendarListAdapter);
-
+        personalCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getActivity(), EventActivity.class);
+                startActivity(intent);
+            }
+        });
         queryHandler = new QueryHandler(getContext(), this);
         queryHandler.startQuery(1, null, uri, projection, null, null, null);
 
