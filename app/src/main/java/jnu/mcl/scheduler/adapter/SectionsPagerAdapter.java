@@ -20,10 +20,9 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         Fragment fragment;
-        if(position == 0){
+        if (position == 0) {
             fragment = PersonalCalendarFragment.newInstance();
-        }
-        else{
+        } else {
             fragment = ShareCalendarFragment.newInstance();
         }
         return fragment;

@@ -1,7 +1,6 @@
 package jnu.mcl.scheduler.service;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.connector.DBConnector;
+import jnu.mcl.scheduler.listener.CalendarServiceListener;
 import jnu.mcl.scheduler.model.CalendarModel;
 
 /**
@@ -17,6 +17,7 @@ import jnu.mcl.scheduler.model.CalendarModel;
  */
 public class CalendarService {
 
+    private ArrayList<CalendarServiceListener> calendarServiceListeners;
     private static CalendarService newInstance;
     private DBConnector dbConnector;
 
@@ -38,11 +39,9 @@ public class CalendarService {
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery("select * from t_calendar");
             while (resultSet.next()) {
-//                CalendarModel calendarModel = new CalendarModel();
-//                calendarModel.setNo(resultSet.getInt(1));
-//                calendarModel.setName(resultSet.getString(2));
-//                calendarModel.setDescription(resultSet.getString(5));
-//                calendarModelArrayList.add(calendarModel);
+                CalendarModel calendarModel = new CalendarModel();
+                calendarModel.setName(resultSet.getString(4));
+                calendarModelArrayList.add(calendarModel);
             }
             conn.close();
         } catch (Exception e) {
@@ -51,20 +50,32 @@ public class CalendarService {
         return calendarModelArrayList;
     }
 
-    public void addCalendar(String name, String admin, String type, String description) {
+    public void addCalendar(String account_name, String account_type, String name, String calendar_display_name) {
         Connection conn = dbConnector.getConnection();
         try {
-            String query = "insert into t_calendar (name, admin, type, description) values (?, ?, ?, ?)";
+            String query = "insert into t_calendar (account_name, account_type, name, calendar_display_name) values (?, ?, ?, ?)";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, admin);
-            preparedStatement.setString(3, type);
-            preparedStatement.setString(4, description);
+            preparedStatement.setString(1, account_name);
+            preparedStatement.setString(2, account_type);
+            preparedStatement.setString(3, name);
+            preparedStatement.setString(4, calendar_display_name);
             preparedStatement.executeUpdate();
             conn.close();
         } catch (Exception e) {
             Log.w("Error connection", e);
         }
 
+    }
+
+    public void addCalendarServiceListener(CalendarServiceListener userServiceListener){
+        if(!calendarServiceListeners.contains(userServiceListener)) {
+            calendarServiceListeners.add(userServiceListener);
+        }
+    }
+
+    public void notifyCalendarCreate(){
+        for(CalendarServiceListener calendarServiceListener : calendarServiceListeners){
+            calendarServiceListener.onCalendarCreate();
+        }
     }
 }
