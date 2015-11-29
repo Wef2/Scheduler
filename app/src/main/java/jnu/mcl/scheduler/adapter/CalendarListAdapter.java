@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
@@ -19,6 +21,7 @@ public class CalendarListAdapter extends ArrayAdapter<CalendarModel> {
 
     public CalendarListAdapter(Context context, ArrayList<CalendarModel> calendarModelList) {
         super(context, 0, calendarModelList);
+        setNotifyOnChange(true);
     }
 
     @Override
@@ -27,10 +30,10 @@ public class CalendarListAdapter extends ArrayAdapter<CalendarModel> {
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.calendar_item, parent, false);
         }
+        TextView calendarIdText = (TextView) view.findViewById(R.id.calendarIdText);
         TextView calendarNameText = (TextView) view.findViewById(R.id.calendarNameText);
-        TextView calendarDescriptionText = (TextView) view.findViewById(R.id.calendarDescriptionText);
+        calendarIdText.setText(""+calendarModel.getId());
         calendarNameText.setText(calendarModel.getName());
-        calendarDescriptionText.setText(calendarModel.getDescription());
         return view;
     }
 

@@ -20,6 +20,8 @@ public class AddCalendarDialog extends Dialog implements View.OnClickListener{
 
     private Context context;
 
+    private String name, admin, type, description;
+
     public AddCalendarDialog(Context context) {
         super(context);
         this.context = context;

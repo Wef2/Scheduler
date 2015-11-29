@@ -1,54 +1,92 @@
 package jnu.mcl.scheduler.model;
 
+import android.content.ContentValues;
+import android.net.Uri;
+import android.provider.CalendarContract;
+
 /**
  * Created by Kim on 2015-11-27.
  */
 public class CalendarModel {
 
-    private int no;
+    private int id;
+
+    private String accountName;
+    private String accountType;
     private String name;
-    private String admin;
-    private String type;
-    private String description;
+    private String calendarDisplayName;
+    private String calendarColor;
+    private String calendarAccessLevel;
+    private String ownerAccount;
 
-    public void setNo(int no) {
-        this.no = no;
+    private boolean syncEvents;
+    private String calendarTimeZone;
+    private String allowedReminders;
+    private String allowedAvailability;
+    private String allowedAttendeeTypes;
+
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getNo() {
-        return no;
+    public String getAccountName() {
+        return accountName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(String accountType) {
+        this.accountType = accountType;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setAdmin(String admin) {
-        this.admin = admin;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getAdmin() {
-        return admin;
+    public String getCalendarDisplayName() {
+        return calendarDisplayName;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setCalendarDisplayName(String calendarDisplayName) {
+        this.calendarDisplayName = calendarDisplayName;
     }
 
-    public String getType() {
-        return type;
+    public int getId() {
+        return this.id;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public String getCalendarColor() {
+        return calendarColor;
     }
 
-    public String getDescription() {
-        return description;
+    public void setCalendarColor(String calendarColor) {
+        this.calendarColor = calendarColor;
+    }
+
+    public String getCalendarAccessLevel() {
+        return calendarAccessLevel;
+    }
+
+    public void setCalendarAccessLevel(String calendarAccessLevel) {
+        this.calendarAccessLevel = calendarAccessLevel;
+    }
+
+    public String getOwnerAccount() {
+        return ownerAccount;
+    }
+
+    public void setOwnerAccount(String ownerAccount) {
+        this.ownerAccount = ownerAccount;
     }
 
 }

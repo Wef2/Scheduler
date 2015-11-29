@@ -19,6 +19,7 @@ public class UserListAdapter extends ArrayAdapter<UserModel> {
 
     public UserListAdapter(Context context, ArrayList<UserModel> userModelList) {
         super(context, 0, userModelList);
+        setNotifyOnChange(true);
     }
 
     @Override

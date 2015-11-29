@@ -12,6 +12,7 @@ import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.activity.FriendActivity;
 import jnu.mcl.scheduler.activity.ProfileActivity;
 import jnu.mcl.scheduler.activity.CalendarActivity;
+import jnu.mcl.scheduler.activity.ScheduleActivity;
 import jnu.mcl.scheduler.activity.SettingsActivity;
 
 /**
@@ -36,14 +37,19 @@ public class NavigationItemSelectedListener implements NavigationView.OnNavigati
             if (gotClass != ProfileActivity.class) {
                 Intent intent = new Intent(this.activity, ProfileActivity.class);
                 this.activity.startActivity(intent);
+                Log.w("Intent", "To Profile Activity");
+            }
+        } else if (id == R.id.nav_schedule) {
+            if (gotClass != ScheduleActivity.class) {
+                Intent intent = new Intent(this.activity, ScheduleActivity.class);
+                this.activity.startActivity(intent);
                 Log.w("Intent", "To Schedule Activity");
             }
-
         } else if (id == R.id.nav_calendar) {
             if (gotClass != CalendarActivity.class) {
                 Intent intent = new Intent(this.activity, CalendarActivity.class);
                 this.activity.startActivity(intent);
-                Log.w("Intent", "To Schedule Activity");
+                Log.w("Intent", "To Calendar Activity");
             }
         } else if (id == R.id.nav_friend) {
             if (gotClass != FriendActivity.class) {

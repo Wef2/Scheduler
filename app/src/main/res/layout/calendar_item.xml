@@ -22,6 +22,14 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/calendarIdText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calendar ID"
+            android:textColor="#777777"
+            android:textSize="15dp" />
+
+        <TextView
             android:id="@+id/calendarNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,12 +37,6 @@
             android:textColor="#111111"
             android:textSize="25dp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/calendarDescriptionText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Calendar Description" />
 
     </LinearLayout>
 
