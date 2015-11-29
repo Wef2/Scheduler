@@ -1,5 +1,6 @@
 package jnu.mcl.scheduler.activity;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,42 +12,40 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
+import jnu.mcl.scheduler.dialog.AddCalendarDialog;
 import jnu.mcl.scheduler.handler.QueryHandler;
-import jnu.mcl.scheduler.listener.QueryListener;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
+import jnu.mcl.scheduler.listener.QueryListener;
 import jnu.mcl.scheduler.model.CalendarModel;
 import jnu.mcl.scheduler.service.CalendarService;
 
 public class CalendarActivity extends AppCompatActivity implements QueryListener {
 
+    public Uri uri = CalendarContract.Calendars.CONTENT_URI;
+    public String[] projection = new String[]{
+            CalendarContract.Calendars._ID,
+            CalendarContract.Calendars.NAME,
+            CalendarContract.Calendars.ACCOUNT_NAME,
+            CalendarContract.Calendars.ACCOUNT_TYPE,
+            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
+            CalendarContract.Calendars.CALENDAR_COLOR,
+            CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL,
+            CalendarContract.Calendars.SYNC_EVENTS,
+    };
+
     private CalendarService calendarService = CalendarService.getInstance();
     private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
-
     private ArrayList<CalendarModel> calendarModelArrayList = new ArrayList<CalendarModel>();
     private CalendarListAdapter calendarListAdapter;
     private ListView calendarListView;
-
     private QueryHandler queryHandler;
-
-    public Uri uri = CalendarContract.Calendars.CONTENT_URI;
-
-    public String[] projection = new String[]{
-                CalendarContract.Calendars._ID,
-                CalendarContract.Calendars.NAME,
-                CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
-                CalendarContract.Calendars.CALENDAR_LOCATION,
-                CalendarContract.Calendars.ACCOUNT_NAME,
-                CalendarContract.Calendars.ACCOUNT_TYPE,
-                CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL,
-                CalendarContract.Calendars.SYNC_EVENTS,
-                CalendarContract.Calendars.VISIBLE
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,8 @@ public class CalendarActivity extends AppCompatActivity implements QueryListener
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                AddCalendarDialog addCalendarDialog = new AddCalendarDialog(CalendarActivity.this);
+                addCalendarDialog.show();
             }
         });
 
@@ -75,6 +75,13 @@ public class CalendarActivity extends AppCompatActivity implements QueryListener
         calendarListView = (ListView) findViewById(R.id.calendarListView);
         calendarListAdapter = new CalendarListAdapter(this, calendarModelArrayList);
         calendarListView.setAdapter(calendarListAdapter);
+        calendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(CalendarActivity.this, EventActivity.class);
+                startActivity(intent);
+            }
+        });
 
         queryHandler = new QueryHandler(this, this);
         queryHandler.startQuery(1, null, uri, projection, null, null, null);
@@ -83,7 +90,7 @@ public class CalendarActivity extends AppCompatActivity implements QueryListener
     @Override
     public void onQueryComplete(int token, Object cookie, Cursor cursor) {
         calendarModelArrayList.clear();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             CalendarModel calendarModel = new CalendarModel();
             calendarModel.setId(cursor.getInt(0));
             calendarModel.setName(cursor.getString(2));
