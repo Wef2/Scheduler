@@ -1,9 +1,9 @@
 package jnu.mcl.scheduler.fragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +11,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.activity.EventActivity;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
+import jnu.mcl.scheduler.listener.CalendarServiceListener;
 import jnu.mcl.scheduler.model.CalendarModel;
 import jnu.mcl.scheduler.service.CalendarService;
 
@@ -24,13 +27,13 @@ import jnu.mcl.scheduler.service.CalendarService;
 public class ShareCalendarFragment extends Fragment {
 
     private CalendarService calendarService = CalendarService.getInstance();
+    private CalendarServiceListener calendarServiceListener;
 
     private ArrayList<CalendarModel> shareCalendarList;
     private CalendarListAdapter shareCalendarListAdapter;
     private ListView shareCalendarListView;
 
     public ShareCalendarFragment() {
-
     }
 
     public static ShareCalendarFragment newInstance() {
@@ -46,7 +49,8 @@ public class ShareCalendarFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
         shareCalendarList = calendarService.getCalendarList();
         shareCalendarListView = (ListView) rootView.findViewById(R.id.calendarListView);
-        shareCalendarListAdapter = new CalendarListAdapter(getContext(), shareCalendarList);
+        shareCalendarListAdapter = new CalendarListAdapter(getContext());
+        shareCalendarListAdapter.changeList(calendarService.getCalendarList());
         shareCalendarListView.setAdapter(shareCalendarListAdapter);
         shareCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -55,7 +59,29 @@ public class ShareCalendarFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        calendarServiceListener = new CalendarServiceListener() {
+            @Override
+            public void onCalendarCreate() {
+                calendarDataChanged();
+            }
+
+            @Override
+            public void onCalendarDelete() {
+
+            }
+
+            @Override
+            public void onCalendarUpdate() {
+
+            }
+        };
+        calendarService.addCalendarServiceListener(calendarServiceListener);
+
         return rootView;
     }
 
+    public void calendarDataChanged() {
+        shareCalendarListAdapter.changeList(calendarService.getCalendarList());
+    }
 }

@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import jnu.mcl.scheduler.connector.DBConnector;
 import jnu.mcl.scheduler.listener.CalendarServiceListener;
@@ -23,6 +24,7 @@ public class CalendarService {
 
     private CalendarService() {
         dbConnector = DBConnector.getInstance();
+        calendarServiceListeners = new ArrayList<CalendarServiceListener>();
     }
 
     public static CalendarService getInstance() {
@@ -34,20 +36,20 @@ public class CalendarService {
 
     public ArrayList<CalendarModel> getCalendarList() {
         Connection conn = dbConnector.getConnection();
-        ArrayList<CalendarModel> calendarModelArrayList = new ArrayList<CalendarModel>();
+        ArrayList<CalendarModel> calendarList = new ArrayList<CalendarModel>();
         try {
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery("select * from t_calendar");
             while (resultSet.next()) {
                 CalendarModel calendarModel = new CalendarModel();
-                calendarModel.setName(resultSet.getString(4));
-                calendarModelArrayList.add(calendarModel);
+                calendarModel.setName(resultSet.getString(5));
+                calendarList.add(calendarModel);
             }
             conn.close();
         } catch (Exception e) {
             Log.w("Error connection", e);
         }
-        return calendarModelArrayList;
+        return calendarList;
     }
 
     public void addCalendar(String account_name, String account_type, String name, String calendar_display_name) {
@@ -58,18 +60,18 @@ public class CalendarService {
             preparedStatement.setString(1, account_name);
             preparedStatement.setString(2, account_type);
             preparedStatement.setString(3, name);
-            preparedStatement.setString(5, calendar_display_name);
+            preparedStatement.setString(4, calendar_display_name);
             preparedStatement.executeUpdate();
             conn.close();
         } catch (Exception e) {
             Log.w("Error connection", e);
         }
-
+        notifyCalendarCreate();
     }
 
-    public void addCalendarServiceListener(CalendarServiceListener userServiceListener){
-        if(!calendarServiceListeners.contains(userServiceListener)) {
-            calendarServiceListeners.add(userServiceListener);
+    public void addCalendarServiceListener(CalendarServiceListener calendarServiceListener){
+        if(!calendarServiceListeners.contains(calendarServiceListener)) {
+            calendarServiceListeners.add(calendarServiceListener);
         }
     }
 

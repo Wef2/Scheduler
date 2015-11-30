@@ -7,19 +7,13 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.adapter.UserListAdapter;
-import jnu.mcl.scheduler.connector.DBConnector;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
 import jnu.mcl.scheduler.model.UserModel;
 import jnu.mcl.scheduler.service.UserService;
@@ -29,7 +23,7 @@ public class FriendActivity extends AppCompatActivity {
     private UserService userService = UserService.getInstance();
     private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
 
-    private ArrayList<UserModel> friendArrayList;
+    private ArrayList<UserModel> friendList;
     private UserListAdapter userListAdapter;
     private ListView friendListView;
 
@@ -58,9 +52,10 @@ public class FriendActivity extends AppCompatActivity {
         navigationView.setNavigationItemSelectedListener(navigationItemSelectedListener);
 
         friendListView = (ListView) findViewById(R.id.friendListView);
-        friendArrayList = userService.getUserList();
-        userListAdapter = new UserListAdapter(this, friendArrayList);
+        userListAdapter = new UserListAdapter(this);
         friendListView.setAdapter(userListAdapter);
+        friendList = userService.getUserList();
+        userListAdapter.changeList(friendList);
     }
 
 

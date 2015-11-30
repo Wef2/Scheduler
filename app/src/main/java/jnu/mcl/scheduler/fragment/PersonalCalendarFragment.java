@@ -59,7 +59,7 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
         personalCalendarListView = (ListView) rootView.findViewById(R.id.calendarListView);
-        personalCalendarListAdapter = new CalendarListAdapter(getContext(), personalCalendarList);
+        personalCalendarListAdapter = new CalendarListAdapter(getContext());
         personalCalendarListView.setAdapter(personalCalendarListAdapter);
         personalCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -83,7 +83,7 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
             calendarModel.setName(cursor.getString(4));
             personalCalendarList.add(calendarModel);
         }
-        personalCalendarListAdapter.notifyDataSetChanged();
+        personalCalendarListAdapter.changeList(personalCalendarList);
     }
 
     @Override

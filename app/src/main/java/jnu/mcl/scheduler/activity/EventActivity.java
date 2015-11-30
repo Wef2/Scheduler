@@ -28,7 +28,6 @@ public class EventActivity extends AppCompatActivity implements QueryListener {
             CalendarContract.Events.DTEND
     };
 
-
     private QueryHandler queryHandler;
     private ArrayList<EventModel> eventList = new ArrayList<EventModel>();
     private EventListAdapter eventListAdapter;
@@ -58,11 +57,10 @@ public class EventActivity extends AppCompatActivity implements QueryListener {
         });
 
         eventListView = (ListView) findViewById(R.id.eventListView);
-        eventListAdapter = new EventListAdapter(EventActivity.this, eventList);
+        eventListAdapter = new EventListAdapter(EventActivity.this);
         eventListView.setAdapter(eventListAdapter);
         queryHandler = new QueryHandler(EventActivity.this, this);
         queryHandler.startQuery(1, null, uri, projection, null, null, null);
-
     }
 
     @Override
@@ -75,7 +73,7 @@ public class EventActivity extends AppCompatActivity implements QueryListener {
             eventModel.setDtend(cursor.getString(2));
             eventList.add(eventModel);
         }
-        eventListAdapter.notifyDataSetChanged();
+        eventListAdapter.changeList(eventList);
     }
 
     @Override

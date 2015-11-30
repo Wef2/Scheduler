@@ -5,9 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.model.EventModel;
@@ -15,27 +19,69 @@ import jnu.mcl.scheduler.model.EventModel;
 /**
  * Created by 김 on 2015-11-29.
  */
-public class EventListAdapter extends ArrayAdapter<EventModel> {
+public class EventListAdapter extends BaseAdapter {
 
+    private ArrayList<EventModel> eventModels;
+    private LayoutInflater inflater;
 
-    public EventListAdapter(Context context, ArrayList<EventModel> eventModelList) {
-        super(context, 0, eventModelList);
-        setNotifyOnChange(true);
+    public EventListAdapter(Context context) {
+        this.inflater = LayoutInflater.from(context);
+        this.eventModels = new ArrayList<>();
+    }
+
+    public void changeList(Collection<EventModel> newEventModels) {
+        this.eventModels.clear();
+        this.eventModels.addAll(newEventModels);
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getCount() {
+        return eventModels.size();
+    }
+
+    @Override
+    public EventModel getItem(int position) {
+        return eventModels.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
     }
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
-        EventModel eventModel = getItem(position);
-        if (view == null) {
-            view = LayoutInflater.from(getContext()).inflate(R.layout.event_item, parent, false);
-        }
-        TextView eventNameText = (TextView) view.findViewById(R.id.eventTitleText);
-        TextView eventStartText = (TextView) view.findViewById(R.id.eventStartText);
-        TextView eventEndText = (TextView) view.findViewById(R.id.eventEndText);
-
-        eventNameText.setText(eventModel.getTitle());
-        eventStartText.setText(eventModel.getDtstart());
-        eventEndText.setText(eventModel.getDtend());
+        view = inflateIfRequired(view, position, parent);
+        bind(getItem(position), view);
         return view;
     }
+
+    private void bind(EventModel eventModel, View view) {
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        viewHolder.eventTitleText.setText(eventModel.getTitle());
+        viewHolder.eventStartText.setText(eventModel.getDtstart());
+        viewHolder.eventEndText.setText(eventModel.getDtend());
+    }
+
+    private View inflateIfRequired(View view, int position, ViewGroup parent) {
+        if (view == null) {
+            view = inflater.inflate(R.layout.event_item, null);
+            view.setTag(new ViewHolder(view));
+        }
+        return view;
+    }
+
+    static class ViewHolder {
+        final TextView eventTitleText;
+        final TextView eventStartText;
+        final TextView eventEndText;
+
+        ViewHolder(View view) {
+            eventTitleText = (TextView) view.findViewById(R.id.eventTitleText);
+            eventStartText = (TextView) view.findViewById(R.id.eventStartText);
+            eventEndText = (TextView) view.findViewById(R.id.eventEndText);
+        }
+    }
+
 }
