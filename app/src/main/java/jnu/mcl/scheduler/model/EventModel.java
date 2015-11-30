@@ -5,8 +5,9 @@ package jnu.mcl.scheduler.model;
  */
 public class EventModel {
 
-    private String title;
+    private int event_no;
 
+    private String title;
     private String dtstart;
     private String dtend;
     private String duration;
@@ -14,6 +15,14 @@ public class EventModel {
     private String rdate;
     private String eventTimezone;
     private String calendarId;
+
+    public int getEvent_no() {
+        return event_no;
+    }
+
+    public void setEvent_no(int event_no) {
+        this.event_no = event_no;
+    }
 
     public String getTitle() {
         return title;

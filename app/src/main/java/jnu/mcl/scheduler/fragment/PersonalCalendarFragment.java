@@ -15,7 +15,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
-import jnu.mcl.scheduler.activity.EventActivity;
+import jnu.mcl.scheduler.activity.PersonalEventActivity;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
 import jnu.mcl.scheduler.handler.QueryHandler;
 import jnu.mcl.scheduler.listener.QueryListener;
@@ -64,7 +64,7 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
         personalCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), EventActivity.class);
+                Intent intent = new Intent(getActivity(), PersonalEventActivity.class);
                 startActivity(intent);
             }
         });

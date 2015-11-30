@@ -33,13 +33,13 @@ public class UserService {
         return newInstance;
     }
 
-    public ArrayList<UserModel> getUserList(){
+    public ArrayList<UserModel> getUserList() {
         ArrayList<UserModel> userModelArrayList = new ArrayList<UserModel>();
         Connection conn = dbConnector.getConnection();
         try {
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery("select * from t_user");
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 UserModel userModel = new UserModel();
                 userModel.setNo(resultSet.getInt(1));
                 userModel.setId(resultSet.getString(2));
@@ -108,10 +108,10 @@ public class UserService {
         }
     }
 
-    public void updateUser(String id, String nickname, String description){
+    public void updateUser(String id, String nickname, String description) {
         Connection conn = dbConnector.getConnection();
         try {
-            String query = "update t_user set nickname='"+nickname+"', description='"+description+"' where id='"+id+"'";
+            String query = "update t_user set nickname='" + nickname + "', description='" + description + "' where id='" + id + "'";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.executeUpdate();
             conn.close();
@@ -122,14 +122,14 @@ public class UserService {
         notifyUserUpdate();
     }
 
-    public void addUserServiceListener(UserServiceListener userServiceListener){
-        if(!userServiceListeners.contains(userServiceListener)) {
+    public void addUserServiceListener(UserServiceListener userServiceListener) {
+        if (!userServiceListeners.contains(userServiceListener)) {
             userServiceListeners.add(userServiceListener);
         }
     }
 
-    public void notifyUserUpdate(){
-        for(UserServiceListener userServiceListener : userServiceListeners){
+    public void notifyUserUpdate() {
+        for (UserServiceListener userServiceListener : userServiceListeners) {
             userServiceListener.onUserUpdate();
         }
     }

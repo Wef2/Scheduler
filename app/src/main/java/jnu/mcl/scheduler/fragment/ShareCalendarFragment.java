@@ -3,7 +3,6 @@ package jnu.mcl.scheduler.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import jnu.mcl.scheduler.R;
-import jnu.mcl.scheduler.activity.EventActivity;
+import jnu.mcl.scheduler.activity.ShareEventActivity;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
 import jnu.mcl.scheduler.listener.CalendarServiceListener;
 import jnu.mcl.scheduler.model.CalendarModel;
@@ -55,15 +52,25 @@ public class ShareCalendarFragment extends Fragment {
         shareCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), EventActivity.class);
+                Intent intent = new Intent(getActivity(), ShareEventActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        shareCalendarListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+
+                return false;
             }
         });
 
         calendarServiceListener = new CalendarServiceListener() {
             @Override
             public void onCalendarCreate() {
-                calendarDataChanged();
+
+                shareCalendarListAdapter.changeList(calendarService.getCalendarList());
+
             }
 
             @Override
@@ -81,7 +88,4 @@ public class ShareCalendarFragment extends Fragment {
         return rootView;
     }
 
-    public void calendarDataChanged() {
-        shareCalendarListAdapter.changeList(calendarService.getCalendarList());
-    }
 }

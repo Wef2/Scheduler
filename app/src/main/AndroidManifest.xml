@@ -42,7 +42,11 @@
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.EventActivity"
+            android:name=".activity.PersonalEventActivity"
+            android:label="@string/title_activity_event"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.ShareEventActivity"
             android:label="@string/title_activity_event"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -55,9 +59,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activity.TestActivity"
-            android:label="@string/title_activity_test"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".activity.EventInformationActivity"
+            android:label="@string/title_activity_event_information"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

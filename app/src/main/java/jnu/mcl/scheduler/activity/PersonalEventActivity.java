@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -15,11 +14,12 @@ import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.adapter.EventListAdapter;
+import jnu.mcl.scheduler.dialog.AddEventDialog;
 import jnu.mcl.scheduler.handler.QueryHandler;
 import jnu.mcl.scheduler.listener.QueryListener;
 import jnu.mcl.scheduler.model.EventModel;
 
-public class EventActivity extends AppCompatActivity implements QueryListener {
+public class PersonalEventActivity extends AppCompatActivity implements QueryListener {
 
     public Uri uri = CalendarContract.Events.CONTENT_URI;
     public String[] projection = new String[]{
@@ -51,15 +51,15 @@ public class EventActivity extends AppCompatActivity implements QueryListener {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                AddEventDialog addEventDialog = new AddEventDialog(PersonalEventActivity.this);
+                addEventDialog.show();
             }
         });
 
         eventListView = (ListView) findViewById(R.id.eventListView);
-        eventListAdapter = new EventListAdapter(EventActivity.this);
+        eventListAdapter = new EventListAdapter(PersonalEventActivity.this);
         eventListView.setAdapter(eventListAdapter);
-        queryHandler = new QueryHandler(EventActivity.this, this);
+        queryHandler = new QueryHandler(PersonalEventActivity.this, this);
         queryHandler.startQuery(1, null, uri, projection, null, null, null);
     }
 
