@@ -58,7 +58,7 @@ public class CalendarService {
             preparedStatement.setString(1, account_name);
             preparedStatement.setString(2, account_type);
             preparedStatement.setString(3, name);
-            preparedStatement.setString(4, calendar_display_name);
+            preparedStatement.setString(5, calendar_display_name);
             preparedStatement.executeUpdate();
             conn.close();
         } catch (Exception e) {

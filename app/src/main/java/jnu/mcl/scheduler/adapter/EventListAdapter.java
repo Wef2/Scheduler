@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -15,6 +16,7 @@ import jnu.mcl.scheduler.model.EventModel;
  * Created by 김 on 2015-11-29.
  */
 public class EventListAdapter extends ArrayAdapter<EventModel> {
+
 
     public EventListAdapter(Context context, ArrayList<EventModel> eventModelList) {
         super(context, 0, eventModelList);
@@ -27,6 +29,13 @@ public class EventListAdapter extends ArrayAdapter<EventModel> {
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.event_item, parent, false);
         }
+        TextView eventNameText = (TextView) view.findViewById(R.id.eventTitleText);
+        TextView eventStartText = (TextView) view.findViewById(R.id.eventStartText);
+        TextView eventEndText = (TextView) view.findViewById(R.id.eventEndText);
+
+        eventNameText.setText(eventModel.getTitle());
+        eventStartText.setText(eventModel.getDtstart());
+        eventEndText.setText(eventModel.getDtend());
         return view;
     }
 }

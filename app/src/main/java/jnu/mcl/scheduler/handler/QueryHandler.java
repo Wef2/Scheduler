@@ -1,7 +1,6 @@
 package jnu.mcl.scheduler.handler;
 
 import android.content.AsyncQueryHandler;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
@@ -37,6 +36,7 @@ public class QueryHandler extends AsyncQueryHandler {
             cursor.close();
         }
     }
+
     @Override
     protected void onInsertComplete(int token, Object cookie, Uri uri) {
         final QueryListener listener = this.listener.get();
@@ -44,13 +44,15 @@ public class QueryHandler extends AsyncQueryHandler {
             listener.onInsertComplete(token, cookie, uri);
         }
     }
+
     @Override
-    protected void onUpdateComplete(int token, Object cookie, int result){
+    protected void onUpdateComplete(int token, Object cookie, int result) {
         final QueryListener listener = this.listener.get();
         if (listener != null) {
             listener.onUpdateComplete(token, cookie, result);
         }
     }
+
     @Override
     protected void onDeleteComplete(int token, Object cookie, int result) {
         final QueryListener listener = this.listener.get();

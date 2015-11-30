@@ -30,9 +30,7 @@ public class CalendarListAdapter extends ArrayAdapter<CalendarModel> {
         if (view == null) {
             view = LayoutInflater.from(getContext()).inflate(R.layout.calendar_item, parent, false);
         }
-        TextView calendarIdText = (TextView) view.findViewById(R.id.calendarIdText);
         TextView calendarNameText = (TextView) view.findViewById(R.id.calendarNameText);
-        calendarIdText.setText(""+calendarModel.getId());
         calendarNameText.setText(calendarModel.getName());
         return view;
     }

@@ -13,7 +13,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginRight="10dp"
         android:padding="10dp"
-        android:src="@drawable/ic_calendar" />
+        android:src="@drawable/ic_calendar_image" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,20 +22,12 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/calendarIdText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Calendar ID"
-            android:textColor="#777777"
-            android:textSize="15dp" />
-
-        <TextView
             android:id="@+id/calendarNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Calendar Name"
             android:textColor="#111111"
-            android:textSize="25dp"
+            android:textSize="30dp"
             android:textStyle="bold" />
 
     </LinearLayout>
