@@ -8,10 +8,12 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.TimeZone;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.model.EventModel;
@@ -59,9 +61,18 @@ public class EventListAdapter extends BaseAdapter {
 
     private void bind(EventModel eventModel, View view) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
+
+        DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        format.setTimeZone(TimeZone.getDefault());
+        String dtstart = format.format(Long.parseLong(eventModel.getDtstart()));
+        String dtend = "";
+        if(eventModel.getDtend()!=null){
+            dtend = format.format(Long.parseLong(eventModel.getDtend()));
+        }
+
         viewHolder.eventTitleText.setText(eventModel.getTitle());
-        viewHolder.eventStartText.setText(eventModel.getDtstart());
-        viewHolder.eventEndText.setText(eventModel.getDtend());
+        viewHolder.eventStartText.setText(dtstart);
+        viewHolder.eventEndText.setText(dtend);
     }
 
     private View inflateIfRequired(View view, int position, ViewGroup parent) {
