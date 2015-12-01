@@ -15,8 +15,9 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
-import jnu.mcl.scheduler.activity.PersonalEventActivity;
+import jnu.mcl.scheduler.activity.EventActivity;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
+import jnu.mcl.scheduler.dialog.CalendarLongClickDialog;
 import jnu.mcl.scheduler.handler.QueryHandler;
 import jnu.mcl.scheduler.listener.QueryListener;
 import jnu.mcl.scheduler.model.CalendarModel;
@@ -27,7 +28,7 @@ import jnu.mcl.scheduler.model.QueryModel;
  */
 public class PersonalCalendarFragment extends Fragment implements QueryListener {
 
-    private QueryModel queryModel;
+    private QueryModel queryModel = QueryModel.getInstance();
     private QueryHandler queryHandler;
 
     private ArrayList<CalendarModel> personalCalendarList = new ArrayList<CalendarModel>();
@@ -54,8 +55,17 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
         personalCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), PersonalEventActivity.class);
+                Intent intent = new Intent(getActivity(), EventActivity.class);
+                intent.putExtra("type", "personal");
                 startActivity(intent);
+            }
+        });
+        personalCalendarListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                CalendarLongClickDialog calendarLongClickDialog = new CalendarLongClickDialog(getContext());
+                calendarLongClickDialog.show();
+                return true;
             }
         });
         queryHandler = new QueryHandler(getContext(), this);

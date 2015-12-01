@@ -41,10 +41,14 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         dtstartDate = (TextView)findViewById(R.id.dtstartDate);
         dtstartTime = (TextView)findViewById(R.id.dtstartTime);
         dtendDate = (TextView)findViewById(R.id.dtendDate);
-        dtendTime = (TextView)findViewById(R.id.dtendText);
+        dtendTime = (TextView)findViewById(R.id.dtendTime);
 
         confirmButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
+        dtstartDate.setOnClickListener(this);
+        dtstartTime.setOnClickListener(this);
+        dtendDate.setOnClickListener(this);
+        dtendTime.setOnClickListener(this);
     }
 
     public String getEventTitle() {
