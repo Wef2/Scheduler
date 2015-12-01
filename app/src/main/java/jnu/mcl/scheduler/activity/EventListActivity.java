@@ -23,7 +23,7 @@ import jnu.mcl.scheduler.model.EventModel;
 import jnu.mcl.scheduler.model.QueryModel;
 import jnu.mcl.scheduler.service.EventService;
 
-public class EventActivity extends AppCompatActivity implements EventServiceListener, QueryListener {
+public class EventListActivity extends AppCompatActivity implements EventServiceListener, QueryListener {
 
     private EventService eventService = EventService.getInstance();
     private QueryModel queryModel = QueryModel.getInstance();
@@ -53,7 +53,7 @@ public class EventActivity extends AppCompatActivity implements EventServiceList
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EventActivity.this, AddEventActivity.class);
+                Intent intent = new Intent(EventListActivity.this, AddEventActivity.class);
                 startActivity(intent);
             }
         });
@@ -63,12 +63,12 @@ public class EventActivity extends AppCompatActivity implements EventServiceList
         Intent intent = getIntent();
         calendarType = intent.getStringExtra("type");
         eventListView = (ListView) findViewById(R.id.eventListView);
-        eventListAdapter = new EventListAdapter(EventActivity.this);
+        eventListAdapter = new EventListAdapter(EventListActivity.this);
         eventListView.setAdapter(eventListAdapter);
         eventListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(EventActivity.this, EventInformationActivity.class);
+                Intent intent = new Intent(EventListActivity.this, EventInformationActivity.class);
                 intent.putExtra("eventId", eventListAdapter.getItem(position).getId());
                 intent.putExtra("eventNo", eventListAdapter.getItem(position).getEvent_no());
                 startActivity(intent);
@@ -77,14 +77,14 @@ public class EventActivity extends AppCompatActivity implements EventServiceList
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                EventLongClickDialog eventLongClickDialog = new EventLongClickDialog(EventActivity.this);
+                EventLongClickDialog eventLongClickDialog = new EventLongClickDialog(EventListActivity.this);
                 eventLongClickDialog.show();
                 return true;
             }
         });
 
         if (calendarType.equals("personal")) {
-            queryHandler = new QueryHandler(EventActivity.this, this);
+            queryHandler = new QueryHandler(EventListActivity.this, this);
             queryHandler.startQuery(1, null, queryModel.getEventUri(), queryModel.getEventProjection(), null, null, null);
         } else if (calendarType.equals("share")) {
             eventList = eventService.getEventList();

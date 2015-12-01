@@ -5,6 +5,8 @@ package jnu.mcl.scheduler.listener;
  */
 public interface EventServiceListener {
     void onEventCreate();
+
     void onEventDelete();
+
     void onEventUpdate();
 }

@@ -80,4 +80,16 @@ public class CalendarService {
             calendarServiceListener.onCalendarCreate();
         }
     }
+
+    public void notifyCalendarDelete(){
+        for(CalendarServiceListener calendarServiceListener : calendarServiceListeners){
+            calendarServiceListener.onCalendarDelete();
+        }
+    }
+
+    public void notifyCalendarUpdate(){
+        for(CalendarServiceListener calendarServiceListener : calendarServiceListeners){
+            calendarServiceListener.onCalendarUpdate();
+        }
+    }
 }

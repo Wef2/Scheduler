@@ -8,12 +8,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.adapter.UserListAdapter;
+import jnu.mcl.scheduler.dialog.FriendLongClickDialog;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
 import jnu.mcl.scheduler.model.UserModel;
 import jnu.mcl.scheduler.service.UserService;
@@ -54,6 +56,14 @@ public class FriendActivity extends AppCompatActivity {
         friendListView = (ListView) findViewById(R.id.friendListView);
         userListAdapter = new UserListAdapter(this);
         friendListView.setAdapter(userListAdapter);
+        friendListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                FriendLongClickDialog friendLongClickDialog = new FriendLongClickDialog(FriendActivity.this);
+                friendLongClickDialog.show();
+                return true;
+            }
+        });
         friendList = userService.getUserList();
         userListAdapter.changeList(friendList);
     }

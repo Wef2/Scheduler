@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,6 +18,7 @@ import jnu.mcl.scheduler.listener.QueryListener;
 import jnu.mcl.scheduler.model.EventModel;
 import jnu.mcl.scheduler.model.QueryModel;
 import jnu.mcl.scheduler.service.EventService;
+import jnu.mcl.scheduler.util.DateFormatUtil;
 
 public class EventInformationActivity extends AppCompatActivity implements EventServiceListener, QueryListener {
 
@@ -61,24 +61,25 @@ public class EventInformationActivity extends AppCompatActivity implements Event
 
         Intent intent = getIntent();
         event_id = intent.getStringExtra("eventId");
-        if(event_id == null){
+        if (event_id == null) {
             event_no = intent.getIntExtra("eventNo", 0);
             eventModel = eventService.getEvent(event_no);
             eventService.addEventServiceListener(this);
             setTexts();
-        }
-        else{
+        } else {
             queryHandler = new QueryHandler(EventInformationActivity.this, this);
             queryHandler.startQuery(1, null, queryModel.getEventUri(), queryModel.getEventProjection(), null, null, null);
         }
 
     }
 
-    public void setTexts(){
+    public void setTexts() {
+        String dtstart = DateFormatUtil.utcToLocal(eventModel.getDtstart());
+        String dtend = DateFormatUtil.utcToLocal(eventModel.getDtend());
         calendarNameText.setText(eventModel.getCalendarId());
         eventTitleText.setText(eventModel.getTitle());
-        dtstartText.setText(eventModel.getDtstart());
-        dtendText.setText(eventModel.getDtend());
+        dtstartText.setText(dtstart);
+        dtendText.setText(dtend);
     }
 
     @Override

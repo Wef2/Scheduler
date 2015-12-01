@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
-import jnu.mcl.scheduler.activity.EventActivity;
+import jnu.mcl.scheduler.activity.EventListActivity;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
 import jnu.mcl.scheduler.dialog.CalendarLongClickDialog;
 import jnu.mcl.scheduler.handler.QueryHandler;
@@ -55,7 +54,7 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
         personalCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), EventActivity.class);
+                Intent intent = new Intent(getActivity(), EventListActivity.class);
                 intent.putExtra("type", "personal");
                 startActivity(intent);
             }

@@ -86,6 +86,23 @@ public class EventService {
         notifyEventCreate();
     }
 
+    public void addEvent(int calendar_no, String title, String dtstart, String dtend) {
+        Connection conn = dbConnector.getConnection();
+        try {
+            String query = "insert into t_event (calendar_no, title, dtstart, dtend) values (?, ?, ?, ?)";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setInt(1, calendar_no);
+            preparedStatement.setString(2, title);
+            preparedStatement.setString(3, dtstart);
+            preparedStatement.setString(4, dtend);
+            preparedStatement.executeUpdate();
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
+        notifyEventCreate();
+    }
+
     public void addEventServiceListener(EventServiceListener calendarServiceListener) {
         if (!eventServiceListeners.contains(calendarServiceListener)) {
             eventServiceListeners.add(calendarServiceListener);
@@ -95,6 +112,18 @@ public class EventService {
     public void notifyEventCreate() {
         for (EventServiceListener calendarServiceListener : eventServiceListeners) {
             calendarServiceListener.onEventCreate();
+        }
+    }
+
+    public void notifyEventDelete() {
+        for (EventServiceListener calendarServiceListener : eventServiceListeners) {
+            calendarServiceListener.onEventDelete();
+        }
+    }
+
+    public void notifyEventUpdate() {
+        for (EventServiceListener calendarServiceListener : eventServiceListeners) {
+            calendarServiceListener.onEventUpdate();
         }
     }
 }

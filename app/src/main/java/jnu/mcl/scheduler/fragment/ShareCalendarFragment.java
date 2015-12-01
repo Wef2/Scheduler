@@ -12,7 +12,7 @@ import android.widget.ListView;
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
-import jnu.mcl.scheduler.activity.EventActivity;
+import jnu.mcl.scheduler.activity.EventListActivity;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
 import jnu.mcl.scheduler.dialog.CalendarLongClickDialog;
 import jnu.mcl.scheduler.listener.CalendarServiceListener;
@@ -53,7 +53,7 @@ public class ShareCalendarFragment extends Fragment {
         shareCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), EventActivity.class);
+                Intent intent = new Intent(getActivity(), EventListActivity.class);
                 intent.putExtra("type","share");
                 startActivity(intent);
             }

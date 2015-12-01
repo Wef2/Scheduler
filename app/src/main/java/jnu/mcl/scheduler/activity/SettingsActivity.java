@@ -1,5 +1,9 @@
 package jnu.mcl.scheduler.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -12,14 +16,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.listener.NavigationItemSelectedListener;
+import jnu.mcl.scheduler.util.SharedPreferenceUtil;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
 
+    private NavigationItemSelectedListener navigationItemSelectedListener = new NavigationItemSelectedListener(this);
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +43,33 @@ public class SettingsActivity extends AppCompatActivity {
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(navigationItemSelectedListener);
+        textView = (TextView) findViewById(R.id.logoutText);
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                builder.setTitle("로그아웃")
+                        .setMessage("로그아웃 하시겠습니까?")
+                        .setCancelable(true)
+                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                SharedPreferenceUtil.putSharedPreference(SettingsActivity.this, "id", null);
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog dialog = builder.create();
+                dialog.show();
+            }
+        });
     }
 
     @Override
