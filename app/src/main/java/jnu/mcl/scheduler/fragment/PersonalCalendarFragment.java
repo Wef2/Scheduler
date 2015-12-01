@@ -20,24 +20,14 @@ import jnu.mcl.scheduler.adapter.CalendarListAdapter;
 import jnu.mcl.scheduler.handler.QueryHandler;
 import jnu.mcl.scheduler.listener.QueryListener;
 import jnu.mcl.scheduler.model.CalendarModel;
+import jnu.mcl.scheduler.model.QueryModel;
 
 /**
  * Created by 김 on 2015-11-29.
  */
 public class PersonalCalendarFragment extends Fragment implements QueryListener {
 
-    public Uri uri = CalendarContract.Calendars.CONTENT_URI;
-    public String[] projection = new String[]{
-            CalendarContract.Calendars._ID,
-            CalendarContract.Calendars.NAME,
-            CalendarContract.Calendars.ACCOUNT_NAME,
-            CalendarContract.Calendars.ACCOUNT_TYPE,
-            CalendarContract.Calendars.CALENDAR_DISPLAY_NAME,
-            CalendarContract.Calendars.CALENDAR_COLOR,
-            CalendarContract.Calendars.CALENDAR_ACCESS_LEVEL,
-            CalendarContract.Calendars.SYNC_EVENTS,
-    };
-
+    private QueryModel queryModel;
     private QueryHandler queryHandler;
 
     private ArrayList<CalendarModel> personalCalendarList = new ArrayList<CalendarModel>();
@@ -69,7 +59,7 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
             }
         });
         queryHandler = new QueryHandler(getContext(), this);
-        queryHandler.startQuery(1, null, uri, projection, null, null, null);
+        queryHandler.startQuery(1, null, queryModel.getCalendarUri(), queryModel.getCalendarProjection(), null, null, null);
 
         return rootView;
     }

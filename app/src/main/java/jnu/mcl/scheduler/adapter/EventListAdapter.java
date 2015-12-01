@@ -17,6 +17,7 @@ import java.util.TimeZone;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.model.EventModel;
+import jnu.mcl.scheduler.util.DateFormatUtil;
 
 /**
  * Created by 김 on 2015-11-29.
@@ -62,12 +63,10 @@ public class EventListAdapter extends BaseAdapter {
     private void bind(EventModel eventModel, View view) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        format.setTimeZone(TimeZone.getDefault());
-        String dtstart = format.format(Long.parseLong(eventModel.getDtstart()));
+        String dtstart = "시작 : "+DateFormatUtil.utcToLocal(eventModel.getDtstart());
         String dtend = "";
         if(eventModel.getDtend()!=null){
-            dtend = format.format(Long.parseLong(eventModel.getDtend()));
+            dtend = "종료 : "+DateFormatUtil.utcToLocal(eventModel.getDtend());
         }
 
         viewHolder.eventTitleText.setText(eventModel.getTitle());

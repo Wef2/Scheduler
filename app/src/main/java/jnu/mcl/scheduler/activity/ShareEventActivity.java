@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.adapter.EventListAdapter;
-import jnu.mcl.scheduler.dialog.AddEventDialog;
 import jnu.mcl.scheduler.listener.EventServiceListener;
 import jnu.mcl.scheduler.model.EventModel;
 import jnu.mcl.scheduler.service.EventService;
@@ -44,8 +43,8 @@ public class ShareEventActivity extends AppCompatActivity implements EventServic
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AddEventDialog addEventDialog = new AddEventDialog(ShareEventActivity.this);
-                addEventDialog.show();
+                Intent intent = new Intent(ShareEventActivity.this, AddEventActivity.class);
+                startActivity(intent);
             }
         });
 

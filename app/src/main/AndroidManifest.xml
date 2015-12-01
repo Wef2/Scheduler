@@ -14,10 +14,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activity.MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activity.ProfileActivity"
             android:label="@string/title_activity_profile"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -61,6 +57,10 @@
         <activity
             android:name=".activity.EventInformationActivity"
             android:label="@string/title_activity_event_information"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.AddEventActivity"
+            android:label="@string/title_activity_add_event"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

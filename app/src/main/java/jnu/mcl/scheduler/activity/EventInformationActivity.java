@@ -1,22 +1,34 @@
 package jnu.mcl.scheduler.activity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
 import jnu.mcl.scheduler.R;
+import jnu.mcl.scheduler.handler.QueryHandler;
 import jnu.mcl.scheduler.listener.EventServiceListener;
+import jnu.mcl.scheduler.listener.QueryListener;
 import jnu.mcl.scheduler.model.EventModel;
+import jnu.mcl.scheduler.model.QueryModel;
 import jnu.mcl.scheduler.service.EventService;
 
-public class EventInformationActivity extends AppCompatActivity implements EventServiceListener {
+public class EventInformationActivity extends AppCompatActivity implements EventServiceListener, QueryListener {
+
+    private QueryModel queryModel = QueryModel.getInstance();
+    private QueryHandler queryHandler;
 
     private EventService eventService = EventService.getInstance();
     private int event_no;
+    private String event_id;
+
     private EventModel eventModel;
 
     private TextView calendarNameText, eventTitleText, dtstartText, dtendText;
@@ -48,15 +60,25 @@ public class EventInformationActivity extends AppCompatActivity implements Event
         dtendText = (TextView) findViewById(R.id.dtendText);
 
         Intent intent = getIntent();
-        event_no = intent.getIntExtra("eventNo", 0);
-        eventModel = eventService.getEvent(event_no);
+        event_id = intent.getStringExtra("eventId");
+        if(event_id == null){
+            event_no = intent.getIntExtra("eventNo", 0);
+            eventModel = eventService.getEvent(event_no);
+            eventService.addEventServiceListener(this);
+            setTexts();
+        }
+        else{
+            queryHandler = new QueryHandler(EventInformationActivity.this, this);
+            queryHandler.startQuery(1, null, queryModel.getEventUri(), queryModel.getEventProjection(), null, null, null);
+        }
 
+    }
+
+    public void setTexts(){
         calendarNameText.setText(eventModel.getCalendarId());
         eventTitleText.setText(eventModel.getTitle());
         dtstartText.setText(eventModel.getDtstart());
         dtendText.setText(eventModel.getDtend());
-
-        eventService.addEventServiceListener(this);
     }
 
     @Override
@@ -71,6 +93,41 @@ public class EventInformationActivity extends AppCompatActivity implements Event
 
     @Override
     public void onEventUpdate() {
+
+    }
+
+    @Override
+    public void onQueryComplete(int token, Object cookie, Cursor cursor) {
+
+        while (cursor.moveToNext()) {
+            if (cursor.getString(0).equals(event_id)) {
+                Log.w("Test 3", cursor.getString(0));
+                eventModel = new EventModel();
+                eventModel.setId(cursor.getString(0));
+                eventModel.setTitle(cursor.getString(1));
+                eventModel.setDtstart(cursor.getString(2));
+                if (cursor.getString(3) != null) {
+                    eventModel.setDtend(cursor.getString(3));
+                } else {
+                    eventModel.setDtend("");
+                }
+                setTexts();
+            }
+        }
+    }
+
+    @Override
+    public void onInsertComplete(int token, Object cookie, Uri uri) {
+
+    }
+
+    @Override
+    public void onUpdateComplete(int token, Object cookie, int result) {
+
+    }
+
+    @Override
+    public void onDeleteComplete(int token, Object cookie, int result) {
 
     }
 }

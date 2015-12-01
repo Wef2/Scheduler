@@ -7,6 +7,7 @@ public class EventModel {
 
     private int event_no;
 
+    private String id;
     private String title;
     private String dtstart;
     private String dtend;
@@ -15,6 +16,14 @@ public class EventModel {
     private String rdate;
     private String eventTimezone;
     private String calendarId;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public int getEvent_no() {
         return event_no;

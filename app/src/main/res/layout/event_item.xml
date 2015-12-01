@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:text="Event Start"
             android:textColor="#777777"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
         <TextView
             android:id="@+id/eventEndText"
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:text="Event End"
             android:textColor="#777777"
-            android:textSize="20dp" />
+            android:textSize="15dp" />
 
 
     </LinearLayout>
