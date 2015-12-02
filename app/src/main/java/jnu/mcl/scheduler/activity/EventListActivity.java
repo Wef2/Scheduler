@@ -34,6 +34,7 @@ public class EventListActivity extends AppCompatActivity implements EventService
     private ListView eventListView;
 
     private String calendarType;
+    private int calendar_no;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,13 @@ public class EventListActivity extends AppCompatActivity implements EventService
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(EventListActivity.this, AddEventActivity.class);
+                if (calendarType.equals("personal")) {
+                    intent.putExtra("type", "personal");
+
+                } else if (calendarType.equals("share")) {
+                    intent.putExtra("type", "share");
+                    intent.putExtra("calendarNo", calendar_no);
+                }
                 startActivity(intent);
             }
         });
@@ -69,6 +77,13 @@ public class EventListActivity extends AppCompatActivity implements EventService
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(EventListActivity.this, EventInformationActivity.class);
+                if (calendarType.equals("personal")) {
+                    intent.putExtra("type", "personal");
+
+                } else if (calendarType.equals("share")) {
+                    intent.putExtra("type", "share");
+                    intent.putExtra("calendarNo", calendar_no);
+                }
                 intent.putExtra("eventId", eventListAdapter.getItem(position).getId());
                 intent.putExtra("eventNo", eventListAdapter.getItem(position).getEvent_no());
                 startActivity(intent);
@@ -87,6 +102,7 @@ public class EventListActivity extends AppCompatActivity implements EventService
             queryHandler = new QueryHandler(EventListActivity.this, this);
             queryHandler.startQuery(1, null, queryModel.getEventUri(), queryModel.getEventProjection(), null, null, null);
         } else if (calendarType.equals("share")) {
+            calendar_no = intent.getIntExtra("calendarNo", 1);
             eventList = eventService.getEventList();
             eventListAdapter.changeList(eventList);
         }

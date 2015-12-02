@@ -31,6 +31,8 @@ public class ShareCalendarFragment extends Fragment {
     private CalendarListAdapter shareCalendarListAdapter;
     private ListView shareCalendarListView;
 
+    private int calendar_no;
+
     public ShareCalendarFragment() {
     }
 
@@ -53,8 +55,10 @@ public class ShareCalendarFragment extends Fragment {
         shareCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                calendar_no = shareCalendarListAdapter.getItem(position).getCalendar_no();
                 Intent intent = new Intent(getActivity(), EventListActivity.class);
                 intent.putExtra("type","share");
+                intent.putExtra("calendarNo", calendar_no);
                 startActivity(intent);
             }
         });

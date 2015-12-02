@@ -1,6 +1,7 @@
 package jnu.mcl.scheduler.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,19 +19,26 @@ import java.util.Date;
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.dialog.EventDateDialog;
 import jnu.mcl.scheduler.dialog.EventTimeDialog;
+import jnu.mcl.scheduler.model.CalendarModel;
+import jnu.mcl.scheduler.service.CalendarService;
 import jnu.mcl.scheduler.service.EventService;
+import jnu.mcl.scheduler.util.DateFormatUtil;
 
 public class AddEventActivity extends AppCompatActivity implements View.OnClickListener {
     private EventService eventService = EventService.getInstance();
+    private CalendarService calendarService = CalendarService.getInstance();
 
     private Button confirmButton, cancelButton;
     private EditText eventTitleText;
-    private TextView dtstartDate, dtstartTime, dtendDate, dtendTime;
+    private TextView calendarNameText, dtstartDate, dtstartTime, dtendDate, dtendTime;
 
     private Date startDate, endDate;
     private int startYear, startMonth, startDay, startHour, startMinute;
     private int endYear, endMonth, endDay, endHour, endMinute;
 
+    private CalendarModel calendarModel;
+    private String calendar_type;
+    private String calendar_name;
     private int calendar_no;
     private String title;
 
@@ -40,6 +48,18 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         setContentView(R.layout.activity_add_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        calendarNameText = (TextView) findViewById(R.id.calendarNameText);
+        Intent intent = getIntent();
+        calendar_type = intent.getStringExtra("type");
+        if (calendar_type.equals("personal")) {
+
+        } else if (calendar_type.equals("share")) {
+            calendar_no = intent.getIntExtra("calendarNo", calendar_no);
+            calendarModel = calendarService.getCalendar(calendar_no);
+            calendar_name = calendarModel.getName();
+            calendarNameText.setText(calendar_name);
+        }
 
         confirmButton = (Button) findViewById(R.id.confirmButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
@@ -70,14 +90,14 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         setStartTexts();
     }
 
-    public void setStartTexts(){
-        dtstartDate.setText(startYear+"/"+startMonth+"/"+startDay);
-        dtstartTime.setText(startHour+":"+startMinute);
+    public void setStartTexts() {
+        dtstartDate.setText(startYear + "/" + startMonth + "/" + startDay);
+        dtstartTime.setText(startHour + ":" + startMinute);
     }
 
-    public void setEndTexts(){
-        dtendDate.setText(endYear+"/"+endMonth+"/"+endDay);
-        dtendTime.setText(endHour+":"+endMinute);
+    public void setEndTexts() {
+        dtendDate.setText(endYear + "/" + endMonth + "/" + endDay);
+        dtendTime.setText(endHour + ":" + endMinute);
     }
 
     public String getEventTitle() {
@@ -94,7 +114,11 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
             String toastMessage;
             title = getEventTitle();
             if (getEventTitleLength() > 0) {
-                eventService.addEvent(1, title, title);
+                String dtstart;
+                String dtend;
+                dtstart = DateFormatUtil.toUTC(startYear, startMonth, startDay, startHour, startMinute);
+                dtend = DateFormatUtil.toUTC(endYear, endMonth, endDay, endHour, endMinute);
+                eventService.addEvent(calendar_no, title, dtstart, dtend);
                 toastMessage = title + "이벤트가 생성되었습니다.";
                 finish();
             } else {

@@ -34,6 +34,23 @@ public class CalendarService {
         return newInstance;
     }
 
+    public CalendarModel getCalendar(int calendar_no){
+        Connection conn = dbConnector.getConnection();
+        CalendarModel calendarModel = new CalendarModel();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet resultSet = stmt.executeQuery("select * from t_calendar where no="+calendar_no);
+            while (resultSet.next()) {
+                calendarModel.setCalendar_no(resultSet.getInt(1));
+                calendarModel.setName(resultSet.getString(5));
+            }
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
+        return calendarModel;
+    }
+
     public ArrayList<CalendarModel> getCalendarList() {
         Connection conn = dbConnector.getConnection();
         ArrayList<CalendarModel> calendarList = new ArrayList<CalendarModel>();
@@ -42,6 +59,7 @@ public class CalendarService {
             ResultSet resultSet = stmt.executeQuery("select * from t_calendar");
             while (resultSet.next()) {
                 CalendarModel calendarModel = new CalendarModel();
+                calendarModel.setCalendar_no(resultSet.getInt(1));
                 calendarModel.setName(resultSet.getString(5));
                 calendarList.add(calendarModel);
             }

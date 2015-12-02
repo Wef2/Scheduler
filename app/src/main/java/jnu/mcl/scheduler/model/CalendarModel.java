@@ -10,6 +10,7 @@ import android.provider.CalendarContract;
 public class CalendarModel {
 
     private int id;
+    private int calendar_no;
 
     private String accountName;
     private String accountType;
@@ -27,6 +28,14 @@ public class CalendarModel {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getCalendar_no() {
+        return calendar_no;
+    }
+
+    public void setCalendar_no(int calendar_no) {
+        this.calendar_no = calendar_no;
     }
 
     public String getAccountName() {

@@ -53,6 +53,27 @@ public class EventService {
         return eventList;
     }
 
+    public ArrayList<EventModel> getEventList(int calendar_no) {
+        Connection conn = dbConnector.getConnection();
+        ArrayList<EventModel> eventList = new ArrayList<EventModel>();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet resultSet = stmt.executeQuery("select * from t_event where calendar_no="+calendar_no);
+            while (resultSet.next()) {
+                EventModel eventModel = new EventModel();
+                eventModel.setEvent_no(resultSet.getInt(1));
+                eventModel.setTitle(resultSet.getString(3));
+                eventModel.setDtstart(resultSet.getString(4));
+                eventList.add(eventModel);
+            }
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
+        return eventList;
+    }
+
+
     public EventModel getEvent(int event_no) {
         Connection conn = dbConnector.getConnection();
         EventModel eventModel = new EventModel();
