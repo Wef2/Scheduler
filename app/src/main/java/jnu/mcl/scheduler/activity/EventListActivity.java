@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -33,8 +34,12 @@ public class EventListActivity extends AppCompatActivity implements EventService
     private EventListAdapter eventListAdapter;
     private ListView eventListView;
 
+    private EventLongClickDialog eventLongClickDialog;
+    private TextView modifyText, deleteText;
+
     private String calendarType;
     private int calendar_no;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,38 +97,48 @@ public class EventListActivity extends AppCompatActivity implements EventService
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                EventLongClickDialog eventLongClickDialog = new EventLongClickDialog(EventListActivity.this);
+                eventLongClickDialog = new EventLongClickDialog(EventListActivity.this);
                 eventLongClickDialog.show();
+                modifyText = eventLongClickDialog.getModifyText();
+                modifyText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
+                deleteText = eventLongClickDialog.getDeleteText();
+                deleteText.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                    }
+                });
                 return true;
             }
         });
-
         if (calendarType.equals("personal")) {
             queryHandler = new QueryHandler(EventListActivity.this, this);
             queryHandler.startQuery(1, null, queryModel.getEventUri(), queryModel.getEventProjection(), null, null, null);
         } else if (calendarType.equals("share")) {
             calendar_no = intent.getIntExtra("calendarNo", 1);
-            eventList = eventService.getEventList();
+            eventList = eventService.getEventList(calendar_no);
             eventListAdapter.changeList(eventList);
         }
-
     }
 
     @Override
     public void onEventCreate() {
-        if (calendarType.equals("share")) {
-            eventListAdapter.changeList(eventService.getEventList());
-        }
+        eventListAdapter.changeList(eventService.getEventList());
     }
 
     @Override
     public void onEventDelete() {
-
+        eventListAdapter.changeList(eventService.getEventList());
     }
 
     @Override
     public void onEventUpdate() {
-
+        eventListAdapter.changeList(eventService.getEventList());
     }
 
     @Override

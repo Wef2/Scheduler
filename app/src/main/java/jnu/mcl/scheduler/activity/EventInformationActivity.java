@@ -15,8 +15,10 @@ import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.handler.QueryHandler;
 import jnu.mcl.scheduler.listener.EventServiceListener;
 import jnu.mcl.scheduler.listener.QueryListener;
+import jnu.mcl.scheduler.model.CalendarModel;
 import jnu.mcl.scheduler.model.EventModel;
 import jnu.mcl.scheduler.model.QueryModel;
+import jnu.mcl.scheduler.service.CalendarService;
 import jnu.mcl.scheduler.service.EventService;
 import jnu.mcl.scheduler.util.DateFormatUtil;
 
@@ -26,9 +28,15 @@ public class EventInformationActivity extends AppCompatActivity implements Event
     private QueryHandler queryHandler;
 
     private EventService eventService = EventService.getInstance();
+    private CalendarService calendarService = CalendarService.getInstance();
+
+    private int calendar_no;
     private int event_no;
     private String event_id;
 
+    private CalendarModel calendarModel;
+    private String calendar_type;
+    private String calendar_name;
     private EventModel eventModel;
 
     private TextView calendarNameText, eventTitleText, dtstartText, dtendText;
@@ -60,23 +68,27 @@ public class EventInformationActivity extends AppCompatActivity implements Event
         dtendText = (TextView) findViewById(R.id.dtendText);
 
         Intent intent = getIntent();
-        event_id = intent.getStringExtra("eventId");
-        if (event_id == null) {
+        calendar_type = intent.getStringExtra("type");
+        if (calendar_type.equals("personal")) {
+            event_id = intent.getStringExtra("eventId");
+            queryHandler = new QueryHandler(EventInformationActivity.this, this);
+            queryHandler.startQuery(1, null, queryModel.getEventUri(), queryModel.getEventProjection(), null, null, null);
+
+        } else if (calendar_type.equals("share")) {
+            calendar_no = intent.getIntExtra("calendarNo", calendar_no);
+            calendarModel = calendarService.getCalendar(calendar_no);
+            calendar_name = calendarModel.getName();
+            calendarNameText.setText(calendar_name);
             event_no = intent.getIntExtra("eventNo", 0);
             eventModel = eventService.getEvent(event_no);
             eventService.addEventServiceListener(this);
             setTexts();
-        } else {
-            queryHandler = new QueryHandler(EventInformationActivity.this, this);
-            queryHandler.startQuery(1, null, queryModel.getEventUri(), queryModel.getEventProjection(), null, null, null);
         }
-
     }
 
     public void setTexts() {
         String dtstart = DateFormatUtil.utcToLocal(eventModel.getDtstart());
         String dtend = DateFormatUtil.utcToLocal(eventModel.getDtend());
-        calendarNameText.setText(eventModel.getCalendarId());
         eventTitleText.setText(eventModel.getTitle());
         dtstartText.setText(dtstart);
         dtendText.setText(dtend);

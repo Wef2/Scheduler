@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.dialog.EventDateDialog;
@@ -32,7 +34,6 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
     private EditText eventTitleText;
     private TextView calendarNameText, dtstartDate, dtstartTime, dtendDate, dtendTime;
 
-    private Date startDate, endDate;
     private int startYear, startMonth, startDay, startHour, startMinute;
     private int endYear, endMonth, endDay, endHour, endMinute;
 
@@ -77,16 +78,13 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         dtendDate.setOnClickListener(this);
         dtendTime.setOnClickListener(this);
 
-        Calendar calendar = Calendar.getInstance();
-        Date currentTime = calendar.getTime();
+        Calendar calendar = Calendar.getInstance(Locale.KOREA);
 
-        startDate = currentTime;
-        startYear = currentTime.getYear();
-        startMonth = currentTime.getMonth();
-        startDay = currentTime.getDay();
-        startHour = currentTime.getHours();
-        startMinute = currentTime.getMinutes();
-
+        startYear = calendar.get(Calendar.YEAR);
+        startMonth = calendar.get(Calendar.MONTH) + 1;
+        startDay = calendar.get(Calendar.DAY_OF_MONTH);
+        startHour = calendar.get(Calendar.HOUR);
+        startMinute = calendar.get(Calendar.MINUTE);
         setStartTexts();
     }
 

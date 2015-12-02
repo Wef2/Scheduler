@@ -38,12 +38,13 @@ public class EventService {
         ArrayList<EventModel> eventList = new ArrayList<EventModel>();
         try {
             Statement stmt = conn.createStatement();
-            ResultSet resultSet = stmt.executeQuery("select * from t_event");
+            ResultSet resultSet = stmt.executeQuery("select * from t_event order by dtstart asc");
             while (resultSet.next()) {
                 EventModel eventModel = new EventModel();
                 eventModel.setEvent_no(resultSet.getInt(1));
                 eventModel.setTitle(resultSet.getString(3));
                 eventModel.setDtstart(resultSet.getString(4));
+                eventModel.setDtend(resultSet.getString(5));
                 eventList.add(eventModel);
             }
             conn.close();
@@ -58,12 +59,13 @@ public class EventService {
         ArrayList<EventModel> eventList = new ArrayList<EventModel>();
         try {
             Statement stmt = conn.createStatement();
-            ResultSet resultSet = stmt.executeQuery("select * from t_event where calendar_no="+calendar_no);
+            ResultSet resultSet = stmt.executeQuery("select * from t_event where calendar_no="+calendar_no+"order by dtstart asc");
             while (resultSet.next()) {
                 EventModel eventModel = new EventModel();
                 eventModel.setEvent_no(resultSet.getInt(1));
                 eventModel.setTitle(resultSet.getString(3));
                 eventModel.setDtstart(resultSet.getString(4));
+                eventModel.setDtend(resultSet.getString(5));
                 eventList.add(eventModel);
             }
             conn.close();
@@ -81,8 +83,10 @@ public class EventService {
             Statement stmt = conn.createStatement();
             ResultSet resultSet = stmt.executeQuery("select * from t_event where event_no='"+event_no+"'");
             while (resultSet.next()) {
+                eventModel.setEvent_no(resultSet.getInt(1));
                 eventModel.setTitle(resultSet.getString(3));
                 eventModel.setDtstart(resultSet.getString(4));
+                eventModel.setDtend(resultSet.getString(5));
             }
             conn.close();
         } catch (Exception e) {
@@ -124,6 +128,24 @@ public class EventService {
         notifyEventCreate();
     }
 
+    public void updateEvent(){
+        notifyEventUpdate();
+    }
+
+    public void deleteEvent(int event_no){
+        Connection conn = dbConnector.getConnection();
+        try {
+            String query = "delete from t_event where event_no="+event_no;
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.executeUpdate();
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
+        notifyEventDelete();
+
+    }
+
     public void addEventServiceListener(EventServiceListener calendarServiceListener) {
         if (!eventServiceListeners.contains(calendarServiceListener)) {
             eventServiceListeners.add(calendarServiceListener);
@@ -136,15 +158,15 @@ public class EventService {
         }
     }
 
-    public void notifyEventDelete() {
-        for (EventServiceListener calendarServiceListener : eventServiceListeners) {
-            calendarServiceListener.onEventDelete();
-        }
-    }
-
     public void notifyEventUpdate() {
         for (EventServiceListener calendarServiceListener : eventServiceListeners) {
             calendarServiceListener.onEventUpdate();
+        }
+    }
+
+    public void notifyEventDelete() {
+        for (EventServiceListener calendarServiceListener : eventServiceListeners) {
+            calendarServiceListener.onEventDelete();
         }
     }
 }
