@@ -33,12 +33,8 @@ public class DateFormatUtil {
         return dateModel;
     }
 
-    public static String toUTC(int year, int month, int day, int hour, int minute){
-        String monthString = lengthCheck(month);
-        String dayString = lengthCheck(day);
-        String hourString = lengthCheck(hour);
-        String minuteString = lengthCheck(minute);
-        String str = Integer.toString(year) + monthString + dayString + hourString + minuteString +" UTC";
+    public static String toUTC(String year, String month, String day, String hour, String minute){
+        String str = year + month + day + hour + minute +" UTC";
         SimpleDateFormat df = new SimpleDateFormat("yyyyMMddHHmm zzz");
         Date date = null;
         try {

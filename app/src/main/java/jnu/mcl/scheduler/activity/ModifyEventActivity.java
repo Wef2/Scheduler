@@ -33,12 +33,12 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
     private EditText eventTitleText;
     private TextView calendarNameText, dtstartDate, dtstartTime, dtendDate, dtendTime;
 
-    private int startYear, startMonth, startDay, startHour, startMinute;
-    private int endYear, endMonth, endDay, endHour, endMinute;
+    private String startYear, startMonth, startDay, startHour, startMinute;
+    private String endYear, endMonth, endDay, endHour, endMinute;
 
     private CalendarModel calendarModel;
     private String calendar_type;
-    private String calendar_name;
+    private int event_no;
     private String dtstart;
     private String dtend;
     private int calendar_no;
@@ -53,17 +53,17 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
 
         calendarNameText = (TextView) findViewById(R.id.calendarNameText);
         Intent intent = getIntent();
-        dtstart = intent.getStringExtra(dtstart);
-        dtend = intent.getStringExtra(dtend);
+        dtstart = intent.getStringExtra("dtstart");
+        dtend = intent.getStringExtra("dtend");
 
         calendar_type = intent.getStringExtra("type");
         if (calendar_type.equals("personal")) {
 
         } else if (calendar_type.equals("share")) {
+            event_no = intent.getIntExtra("eventNo", 1);
             calendar_no = intent.getIntExtra("calendarNo", calendar_no);
             calendarModel = calendarService.getCalendar(calendar_no);
-            calendar_name = calendarModel.getName();
-            calendarNameText.setText(calendar_name);
+            calendarNameText.setText(calendarModel.getName());
         }
 
         confirmButton = (Button) findViewById(R.id.confirmButton);
@@ -85,17 +85,17 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
         DateModel startDateModel = DateFormatUtil.epochToModel(dtstart);
         DateModel endDateModel = DateFormatUtil.epochToModel(dtend);
 
-        startYear = startDateModel.getYear();
-        startMonth = startDateModel.getMonth();
-        startDay = startDateModel.getDay();
-        startHour = startDateModel.getHour();
-        startMinute = startDateModel.getMinute();
+        startYear = Integer.toString(startDateModel.getYear());
+        startMonth = lengthCheck(startDateModel.getMonth());
+        startDay = lengthCheck(startDateModel.getDay());
+        startHour = lengthCheck(startDateModel.getHour());
+        startMinute = lengthCheck(startDateModel.getMinute());
 
-        endYear = endDateModel.getYear();
-        endMonth = endDateModel.getMonth();
-        endDay = endDateModel.getDay();
-        endHour = endDateModel.getHour();
-        endMinute = endDateModel.getMinute();
+        endYear = lengthCheck(endDateModel.getYear());
+        endMonth = lengthCheck(endDateModel.getMonth());
+        endDay = lengthCheck(endDateModel.getDay());
+        endHour = lengthCheck(endDateModel.getHour());
+        endMinute = lengthCheck(endDateModel.getMinute());
         setStartTexts();
     }
 
@@ -125,8 +125,8 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
             if (getEventTitleLength() > 0) {
                 dtstart = DateFormatUtil.toUTC(startYear, startMonth, startDay, startHour, startMinute);
                 dtend = DateFormatUtil.toUTC(endYear, endMonth, endDay, endHour, endMinute);
-                eventService.addEvent(calendar_no, title, dtstart, dtend);
-                toastMessage = title + "이벤트가 생성되었습니다.";
+                eventService.updateEvent(event_no, title, dtstart, dtend);
+                toastMessage = title + "이벤트가 수정되었습니다.";
                 finish();
             } else {
                 toastMessage = "정보를 입력해주세요";
@@ -141,9 +141,9 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     DatePicker datePicker = dtstartDateDialog.getDatePicker();
-                    startYear = datePicker.getYear();
-                    startMonth = datePicker.getMonth() + 1;
-                    startDay = datePicker.getDayOfMonth();
+                    startYear = lengthCheck(datePicker.getYear());
+                    startMonth = lengthCheck(datePicker.getMonth() + 1);
+                    startDay = lengthCheck(datePicker.getDayOfMonth());
                     setStartTexts();
                 }
             });
@@ -154,8 +154,8 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     TimePicker timePicker = dtstartTimeDialog.getTimePicker();
-                    startHour = timePicker.getCurrentHour();
-                    startMinute = timePicker.getCurrentMinute();
+                    startHour = lengthCheck(timePicker.getCurrentHour());
+                    startMinute = lengthCheck(timePicker.getCurrentMinute());
                     setStartTexts();
                 }
             });
@@ -166,9 +166,9 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     DatePicker datePicker = dtendDateDialog.getDatePicker();
-                    endYear = datePicker.getYear();
-                    endMonth = datePicker.getMonth() + 1;
-                    endDay = datePicker.getDayOfMonth();
+                    endYear = lengthCheck(datePicker.getYear());
+                    endMonth = lengthCheck(datePicker.getMonth() + 1);
+                    endDay = lengthCheck(datePicker.getDayOfMonth());
                     setEndTexts();
                 }
             });
@@ -178,12 +178,23 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     TimePicker timePicker = dtendTimeDialog.getTimePicker();
-                    endHour = timePicker.getCurrentHour();
-                    endMinute = timePicker.getCurrentMinute();
+                    endHour = lengthCheck(timePicker.getCurrentHour());
+                    endMinute = lengthCheck(timePicker.getCurrentMinute());
                     setEndTexts();
                 }
             });
             dtendTimeDialog.show();
         }
+    }
+
+    public String lengthCheck(int value){
+        String returnString;
+        if(value < 10){
+            returnString = "0" + Integer.toString(value);
+        }
+        else{
+            returnString = Integer.toString(value);
+        }
+        return returnString;
     }
 }

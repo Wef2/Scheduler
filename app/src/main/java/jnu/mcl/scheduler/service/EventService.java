@@ -128,7 +128,19 @@ public class EventService {
         notifyEventCreate();
     }
 
-    public void updateEvent(){
+    public void updateEvent(int event_no, String title, String dtstart, String dtend){
+        Connection conn = dbConnector.getConnection();
+        try {
+            String query = "update t_event SET "+"title="+title+",dstart="+dtstart+",dtend="+dtend+" where event_no="+event_no;
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, title);
+            preparedStatement.setString(2, dtstart);
+            preparedStatement.setString(3, dtend);
+            preparedStatement.executeUpdate();
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
         notifyEventUpdate();
     }
 

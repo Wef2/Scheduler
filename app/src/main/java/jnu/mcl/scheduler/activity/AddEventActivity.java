@@ -32,8 +32,8 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
     private EditText eventTitleText;
     private TextView calendarNameText, dtstartDate, dtstartTime, dtendDate, dtendTime;
 
-    private int startYear, startMonth, startDay, startHour, startMinute;
-    private int endYear, endMonth, endDay, endHour, endMinute;
+    private String startYear, startMonth, startDay, startHour, startMinute;
+    private String endYear, endMonth, endDay, endHour, endMinute;
 
     private CalendarModel calendarModel;
     private String calendar_type;
@@ -78,18 +78,18 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
 
         Calendar calendar = Calendar.getInstance(Locale.KOREA);
 
-        startYear = calendar.get(Calendar.YEAR);
-        startMonth = calendar.get(Calendar.MONTH) + 1;
-        startDay = calendar.get(Calendar.DAY_OF_MONTH);
-        startHour = calendar.get(Calendar.HOUR);
-        startMinute = calendar.get(Calendar.MINUTE);
+        startYear = Integer.toString(calendar.get(Calendar.YEAR));
+        startMonth = lengthCheck(calendar.get(Calendar.MONTH) + 1);
+        startDay = lengthCheck(calendar.get(Calendar.DAY_OF_MONTH));
+        startHour = lengthCheck(calendar.get(Calendar.HOUR));
+        startMinute = lengthCheck(calendar.get(Calendar.MINUTE));
         setStartTexts();
 
-        endYear = calendar.get(Calendar.YEAR);
-        endMonth = calendar.get(Calendar.MONTH) + 1;
-        endDay = calendar.get(Calendar.DAY_OF_MONTH);
-        endHour = calendar.get(Calendar.HOUR);
-        endMinute = calendar.get(Calendar.MINUTE);
+        endYear = lengthCheck(calendar.get(Calendar.YEAR));
+        endMonth = lengthCheck(calendar.get(Calendar.MONTH) + 1);
+        endDay = lengthCheck(calendar.get(Calendar.DAY_OF_MONTH));
+        endHour = lengthCheck(calendar.get(Calendar.HOUR));
+        endMinute = lengthCheck(calendar.get(Calendar.MINUTE));
         setEndTexts();
     }
 
@@ -117,10 +117,8 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
             String toastMessage;
             title = getEventTitle();
             if (getEventTitleLength() > 0) {
-                String dtstart;
-                String dtend;
-                dtstart = DateFormatUtil.toUTC(startYear, startMonth, startDay, startHour, startMinute);
-                dtend = DateFormatUtil.toUTC(endYear, endMonth, endDay, endHour, endMinute);
+                String dtstart = DateFormatUtil.toUTC(startYear, startMonth, startDay, startHour, startMinute);
+                String dtend = DateFormatUtil.toUTC(endYear, endMonth, endDay, endHour, endMinute);
                 eventService.addEvent(calendar_no, title, dtstart, dtend);
                 toastMessage = title + "이벤트가 생성되었습니다.";
                 finish();
@@ -137,9 +135,9 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     DatePicker datePicker = dtstartDateDialog.getDatePicker();
-                    startYear = datePicker.getYear();
-                    startMonth = datePicker.getMonth() + 1;
-                    startDay = datePicker.getDayOfMonth();
+                    startYear = lengthCheck(datePicker.getYear());
+                    startMonth = lengthCheck(datePicker.getMonth() + 1);
+                    startDay = lengthCheck(datePicker.getDayOfMonth());
                     setStartTexts();
                 }
             });
@@ -150,8 +148,8 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     TimePicker timePicker = dtstartTimeDialog.getTimePicker();
-                    startHour = timePicker.getCurrentHour();
-                    startMinute = timePicker.getCurrentMinute();
+                    startHour = lengthCheck(timePicker.getCurrentHour());
+                    startMinute = lengthCheck(timePicker.getCurrentMinute());
                     setStartTexts();
                 }
             });
@@ -162,9 +160,9 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     DatePicker datePicker = dtendDateDialog.getDatePicker();
-                    endYear = datePicker.getYear();
-                    endMonth = datePicker.getMonth() + 1;
-                    endDay = datePicker.getDayOfMonth();
+                    endYear = lengthCheck(datePicker.getYear());
+                    endMonth = lengthCheck(datePicker.getMonth() + 1);
+                    endDay = lengthCheck(datePicker.getDayOfMonth());
                     setEndTexts();
                 }
             });
@@ -174,12 +172,23 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onDismiss(DialogInterface dialog) {
                     TimePicker timePicker = dtendTimeDialog.getTimePicker();
-                    endHour = timePicker.getCurrentHour();
-                    endMinute = timePicker.getCurrentMinute();
+                    endHour = lengthCheck(timePicker.getCurrentHour());
+                    endMinute = lengthCheck(timePicker.getCurrentMinute());
                     setEndTexts();
                 }
             });
             dtendTimeDialog.show();
         }
+    }
+
+    public String lengthCheck(int value){
+        String returnString;
+        if(value < 10){
+            returnString = "0" + Integer.toString(value);
+        }
+        else{
+            returnString = Integer.toString(value);
+        }
+        return returnString;
     }
 }
