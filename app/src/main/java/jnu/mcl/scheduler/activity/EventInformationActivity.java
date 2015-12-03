@@ -1,13 +1,14 @@
 package jnu.mcl.scheduler.activity;
 
+import android.content.ContentUris;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.CalendarContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -62,16 +63,18 @@ public class EventInformationActivity extends AppCompatActivity implements Event
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(EventInformationActivity.this, ModifyEventActivity.class);
                 if (calendar_type.equals("personal")) {
-                    intent.putExtra("type", "personal");
-
+                    Uri uri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, Integer.parseInt(eventModel.getId()));
+                    Intent intent = new Intent(Intent.ACTION_EDIT).setData(uri);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 } else if (calendar_type.equals("share")) {
+                    Intent intent = new Intent(EventInformationActivity.this, ModifyEventActivity.class);
                     intent.putExtra("type", "share");
                     intent.putExtra("calendarNo", calendar_no);
                     intent.putExtra("eventNo", eventModel.getEvent_no());
+                    startActivity(intent);
                 }
-                startActivity(intent);
                 finish();
             }
         });
@@ -126,7 +129,6 @@ public class EventInformationActivity extends AppCompatActivity implements Event
 
         while (cursor.moveToNext()) {
             if (cursor.getString(0).equals(event_id)) {
-                Log.w("Test 3", cursor.getString(0));
                 eventModel = new EventModel();
                 eventModel.setId(cursor.getString(0));
                 eventModel.setTitle(cursor.getString(1));

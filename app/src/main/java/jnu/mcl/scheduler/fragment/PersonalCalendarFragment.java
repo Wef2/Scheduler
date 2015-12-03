@@ -34,6 +34,8 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
     private CalendarListAdapter personalCalendarListAdapter;
     private ListView personalCalendarListView;
 
+    private CalendarModel calendarModel;
+
     private CustomLongClickDialog customLongClickDialog;
 
     public PersonalCalendarFragment() {
@@ -47,7 +49,7 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_calendar, container, false);
         personalCalendarListView = (ListView) rootView.findViewById(R.id.calendarListView);
@@ -56,8 +58,10 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
         personalCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                calendarModel = personalCalendarListAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), EventListActivity.class);
                 intent.putExtra("type", "personal");
+                intent.putExtra("calendarId",calendarModel.getId());
                 startActivity(intent);
             }
         });
@@ -81,7 +85,7 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
         personalCalendarList.clear();
         while (cursor.moveToNext()) {
             CalendarModel calendarModel = new CalendarModel();
-            calendarModel.setId(cursor.getInt(0));
+            calendarModel.setId(cursor.getString(0));
             calendarModel.setName(cursor.getString(4));
             personalCalendarList.add(calendarModel);
         }

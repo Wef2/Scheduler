@@ -36,6 +36,7 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
     private String endYear, endMonth, endDay, endHour, endMinute;
 
     private CalendarModel calendarModel;
+    private String calendar_id;
     private String calendar_type;
     private String calendar_name;
     private int calendar_no;
@@ -114,18 +115,26 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View v) {
         if (v == confirmButton) {
-            String toastMessage;
+
+            String toastMessage = null;
             title = getEventTitle();
+            String dtstart = DateFormatUtil.toUTC(startYear, startMonth, startDay, startHour, startMinute);
+            String dtend = DateFormatUtil.toUTC(endYear, endMonth, endDay, endHour, endMinute);
             if (getEventTitleLength() > 0) {
-                String dtstart = DateFormatUtil.toUTC(startYear, startMonth, startDay, startHour, startMinute);
-                String dtend = DateFormatUtil.toUTC(endYear, endMonth, endDay, endHour, endMinute);
-                eventService.addEvent(calendar_no, title, dtstart, dtend);
+                if (calendar_type.equals("personal")) {
+                    {
+
+                    }
+                } else if (calendar_type.equals("share")) {
+                    eventService.addEvent(calendar_no, title, dtstart, dtend);
+                }
                 toastMessage = title + "이벤트가 생성되었습니다.";
                 finish();
             } else {
                 toastMessage = "정보를 입력해주세요";
             }
             Toast.makeText(this, toastMessage, Toast.LENGTH_SHORT).show();
+
         } else if (v == cancelButton) {
             finish();
         } else if (v == dtstartDate) {
@@ -181,12 +190,11 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public String lengthCheck(int value){
+    public String lengthCheck(int value) {
         String returnString;
-        if(value < 10){
+        if (value < 10) {
             returnString = "0" + Integer.toString(value);
-        }
-        else{
+        } else {
             returnString = Integer.toString(value);
         }
         return returnString;

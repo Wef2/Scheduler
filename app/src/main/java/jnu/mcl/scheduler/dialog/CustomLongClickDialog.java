@@ -12,7 +12,7 @@ import jnu.mcl.scheduler.R;
  */
 public class CustomLongClickDialog extends Dialog {
 
-    private TextView modifyText, deleteText;
+    private TextView modifyText, deleteText, copyText;
 
     public CustomLongClickDialog(Context context) {
         super(context);
@@ -21,6 +21,7 @@ public class CustomLongClickDialog extends Dialog {
 
         modifyText = (TextView)findViewById(R.id.modifyText);
         deleteText = (TextView)findViewById(R.id.deleteText);
+        copyText = (TextView)findViewById(R.id.copyText);
     }
 
     public TextView getModifyText(){
@@ -29,6 +30,10 @@ public class CustomLongClickDialog extends Dialog {
 
     public TextView getDeleteText(){
         return deleteText;
+    }
+
+    public TextView getCopyText(){
+        return copyText;
     }
 
 }

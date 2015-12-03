@@ -9,7 +9,7 @@ import android.provider.CalendarContract;
  */
 public class CalendarModel {
 
-    private int id;
+    private String id;
     private int calendar_no;
 
     private String accountName;
@@ -26,7 +26,7 @@ public class CalendarModel {
     private String allowedAvailability;
     private String allowedAttendeeTypes;
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -70,7 +70,7 @@ public class CalendarModel {
         this.calendarDisplayName = calendarDisplayName;
     }
 
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 

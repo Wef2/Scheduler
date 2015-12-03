@@ -37,7 +37,8 @@ public class QueryModel {
             CalendarContract.Events._ID,
             CalendarContract.Events.TITLE,
             CalendarContract.Events.DTSTART,
-            CalendarContract.Events.DTEND
+            CalendarContract.Events.DTEND,
+            CalendarContract.Events.CALENDAR_ID
     };
 
     public Uri getCalendarUri() {
