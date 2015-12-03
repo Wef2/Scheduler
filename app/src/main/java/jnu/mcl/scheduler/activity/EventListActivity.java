@@ -170,13 +170,24 @@ public class EventListActivity extends AppCompatActivity implements EventService
             @Override
             public void onClick(View v) {
                 if (calendarType.equals("personal")) {
-
+                    Intent intent = new Intent(EventListActivity.this, SelectCalendarActivity.class);
+                    intent.putExtra("type","share");
+                    intent.putExtra("title", eventModel.getTitle());
+                    intent.putExtra("dtstart", eventModel.getDtstart());
+                    intent.putExtra("dtend", eventModel.getDtend());
+                    startActivity(intent);
                 } else if (calendarType.equals("share")) {
+                    Intent intent = new Intent(Intent.ACTION_INSERT);
+                    intent.setData(CalendarContract.Events.CONTENT_URI);
+                    intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, Long.parseLong(eventModel.getDtstart()));
+                    intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME,  Long.parseLong(eventModel.getDtend()));
+                    intent.putExtra(CalendarContract.Events.TITLE, eventModel.getTitle());
+                    intent.putExtra(CalendarContract.Events.CALENDAR_ID, calendar_id);
+                    startActivityForResult(intent, 0);
                 }
+                customLongClickDialog.dismiss();
             }
         });
-
-
     }
 
     @Override
