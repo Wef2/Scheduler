@@ -38,10 +38,6 @@
             android:label="@string/title_activity_login"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activity.PersonalEventActivity"
-            android:label="@string/title_activity_event"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activity.EventListActivity"
             android:label="@string/title_activity_event"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -61,7 +57,12 @@
         <activity
             android:name=".activity.AddEventActivity"
             android:label="@string/title_activity_add_event"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".activity.ModifyEventActivity"
+            android:label="@string/title_activity_modify_event"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>

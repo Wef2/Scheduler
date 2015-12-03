@@ -20,11 +20,12 @@ import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.dialog.EventDateDialog;
 import jnu.mcl.scheduler.dialog.EventTimeDialog;
 import jnu.mcl.scheduler.model.CalendarModel;
+import jnu.mcl.scheduler.model.DateModel;
 import jnu.mcl.scheduler.service.CalendarService;
 import jnu.mcl.scheduler.service.EventService;
 import jnu.mcl.scheduler.util.DateFormatUtil;
 
-public class AddEventActivity extends AppCompatActivity implements View.OnClickListener {
+public class ModifyEventActivity extends AppCompatActivity implements View.OnClickListener {
     private EventService eventService = EventService.getInstance();
     private CalendarService calendarService = CalendarService.getInstance();
 
@@ -38,6 +39,8 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
     private CalendarModel calendarModel;
     private String calendar_type;
     private String calendar_name;
+    private String dtstart;
+    private String dtend;
     private int calendar_no;
     private String title;
 
@@ -50,6 +53,9 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
 
         calendarNameText = (TextView) findViewById(R.id.calendarNameText);
         Intent intent = getIntent();
+        dtstart = intent.getStringExtra(dtstart);
+        dtend = intent.getStringExtra(dtend);
+
         calendar_type = intent.getStringExtra("type");
         if (calendar_type.equals("personal")) {
 
@@ -76,21 +82,21 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         dtendDate.setOnClickListener(this);
         dtendTime.setOnClickListener(this);
 
-        Calendar calendar = Calendar.getInstance(Locale.KOREA);
+        DateModel startDateModel = DateFormatUtil.epochToModel(dtstart);
+        DateModel endDateModel = DateFormatUtil.epochToModel(dtend);
 
-        startYear = calendar.get(Calendar.YEAR);
-        startMonth = calendar.get(Calendar.MONTH) + 1;
-        startDay = calendar.get(Calendar.DAY_OF_MONTH);
-        startHour = calendar.get(Calendar.HOUR);
-        startMinute = calendar.get(Calendar.MINUTE);
+        startYear = startDateModel.getYear();
+        startMonth = startDateModel.getMonth();
+        startDay = startDateModel.getDay();
+        startHour = startDateModel.getHour();
+        startMinute = startDateModel.getMinute();
+
+        endYear = endDateModel.getYear();
+        endMonth = endDateModel.getMonth();
+        endDay = endDateModel.getDay();
+        endHour = endDateModel.getHour();
+        endMinute = endDateModel.getMinute();
         setStartTexts();
-
-        endYear = calendar.get(Calendar.YEAR);
-        endMonth = calendar.get(Calendar.MONTH) + 1;
-        endDay = calendar.get(Calendar.DAY_OF_MONTH);
-        endHour = calendar.get(Calendar.HOUR);
-        endMinute = calendar.get(Calendar.MINUTE);
-        setEndTexts();
     }
 
     public void setStartTexts() {
@@ -117,8 +123,6 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
             String toastMessage;
             title = getEventTitle();
             if (getEventTitleLength() > 0) {
-                String dtstart;
-                String dtend;
                 dtstart = DateFormatUtil.toUTC(startYear, startMonth, startDay, startHour, startMinute);
                 dtend = DateFormatUtil.toUTC(endYear, endMonth, endDay, endHour, endMinute);
                 eventService.addEvent(calendar_no, title, dtstart, dtend);

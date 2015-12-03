@@ -37,6 +37,8 @@ public class EventListActivity extends AppCompatActivity implements EventService
     private EventLongClickDialog eventLongClickDialog;
     private TextView modifyText, deleteText;
 
+    private EventModel eventModel;
+
     private String calendarType;
     private int calendar_no;
 
@@ -97,22 +99,8 @@ public class EventListActivity extends AppCompatActivity implements EventService
         eventListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                eventLongClickDialog = new EventLongClickDialog(EventListActivity.this);
+                eventModel = eventListAdapter.getItem(position);
                 eventLongClickDialog.show();
-                modifyText = eventLongClickDialog.getModifyText();
-                modifyText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
-                deleteText = eventLongClickDialog.getDeleteText();
-                deleteText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                    }
-                });
                 return true;
             }
         });
@@ -124,8 +112,40 @@ public class EventListActivity extends AppCompatActivity implements EventService
             eventList = eventService.getEventList(calendar_no);
             eventListAdapter.changeList(eventList);
         }
-    }
 
+        eventLongClickDialog = new EventLongClickDialog(EventListActivity.this);
+        modifyText = eventLongClickDialog.getModifyText();
+        modifyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(EventListActivity.this, ModifyEventActivity.class);
+                if (calendarType.equals("personal")) {
+                    intent.putExtra("type", "personal");
+
+                } else if (calendarType.equals("share")) {
+                    intent.putExtra("type", "share");
+                    intent.putExtra("calendarNo", calendar_no);
+                }
+                intent.putExtra("dtstart",eventModel.getDtstart());
+                intent.putExtra("dtend",eventModel.getDtend());
+                startActivity(intent);
+                eventLongClickDialog.dismiss();
+            }
+        });
+        deleteText = eventLongClickDialog.getDeleteText();
+        deleteText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (calendarType.equals("personal")) {
+                    eventLongClickDialog.dismiss();
+                } else if (calendarType.equals("share")) {
+                    eventService.deleteEvent(eventModel.getEvent_no());
+                    eventLongClickDialog.dismiss();
+                }
+            }
+        });
+
+    }
     @Override
     public void onEventCreate() {
         eventListAdapter.changeList(eventService.getEventList());
