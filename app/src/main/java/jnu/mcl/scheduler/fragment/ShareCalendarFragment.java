@@ -8,13 +8,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.activity.EventListActivity;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
-import jnu.mcl.scheduler.dialog.CalendarLongClickDialog;
+import jnu.mcl.scheduler.dialog.CustomLongClickDialog;
+import jnu.mcl.scheduler.dialog.ModifyCalendarDialog;
 import jnu.mcl.scheduler.listener.CalendarServiceListener;
 import jnu.mcl.scheduler.model.CalendarModel;
 import jnu.mcl.scheduler.service.CalendarService;
@@ -31,7 +34,10 @@ public class ShareCalendarFragment extends Fragment {
     private CalendarListAdapter shareCalendarListAdapter;
     private ListView shareCalendarListView;
 
-    private int calendar_no;
+    private CalendarModel calendarModel;
+
+    private CustomLongClickDialog customLongClickDialog;
+    private TextView modifyText, deleteText;
 
     public ShareCalendarFragment() {
     }
@@ -55,10 +61,10 @@ public class ShareCalendarFragment extends Fragment {
         shareCalendarListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                calendar_no = shareCalendarListAdapter.getItem(position).getCalendar_no();
+                calendarModel = shareCalendarListAdapter.getItem(position);
                 Intent intent = new Intent(getActivity(), EventListActivity.class);
-                intent.putExtra("type","share");
-                intent.putExtra("calendarNo", calendar_no);
+                intent.putExtra("type", "share");
+                intent.putExtra("calendarNo", calendarModel.getCalendar_no());
                 startActivity(intent);
             }
         });
@@ -66,28 +72,48 @@ public class ShareCalendarFragment extends Fragment {
         shareCalendarListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                CalendarLongClickDialog calendarLongClickDialog = new CalendarLongClickDialog(getContext());
-                calendarLongClickDialog.show();
+                calendarModel = shareCalendarListAdapter.getItem(position);
+                customLongClickDialog.show();
                 return true;
+            }
+        });
+
+        customLongClickDialog = new CustomLongClickDialog(getContext());
+        modifyText = customLongClickDialog.getModifyText();
+        deleteText = customLongClickDialog.getDeleteText();
+
+        modifyText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                customLongClickDialog.dismiss();
+                ModifyCalendarDialog modifyCalendarDialog = new ModifyCalendarDialog(getContext(), calendarModel.getCalendar_no());
+                modifyCalendarDialog.show();
+            }
+        });
+
+        deleteText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                calendarService.deleteCalendar(calendarModel.getCalendar_no());
+                Toast.makeText(getContext(),"캘린더를 삭제하였습니다",Toast.LENGTH_SHORT);
+                customLongClickDialog.dismiss();
             }
         });
 
         calendarServiceListener = new CalendarServiceListener() {
             @Override
             public void onCalendarCreate() {
-
                 shareCalendarListAdapter.changeList(calendarService.getCalendarList());
-
             }
 
             @Override
             public void onCalendarDelete() {
-
+                shareCalendarListAdapter.changeList(calendarService.getCalendarList());
             }
 
             @Override
             public void onCalendarUpdate() {
-
+                shareCalendarListAdapter.changeList(calendarService.getCalendarList());
             }
         };
         calendarService.addCalendarServiceListener(calendarServiceListener);

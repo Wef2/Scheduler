@@ -4,6 +4,8 @@ package jnu.mcl.scheduler.model;
  * Created by Kim on 2015-12-03.
  */
 public class DateModel {
+
+    private String meridiem;
     private int year;
     private int month;
     private int day;

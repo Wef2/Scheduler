@@ -7,7 +7,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
 
 import jnu.mcl.scheduler.connector.DBConnector;
 import jnu.mcl.scheduler.listener.CalendarServiceListener;
@@ -34,12 +33,12 @@ public class CalendarService {
         return newInstance;
     }
 
-    public CalendarModel getCalendar(int calendar_no){
+    public CalendarModel getCalendar(int calendar_no) {
         Connection conn = dbConnector.getConnection();
         CalendarModel calendarModel = new CalendarModel();
         try {
             Statement stmt = conn.createStatement();
-            ResultSet resultSet = stmt.executeQuery("select * from t_calendar where no="+calendar_no);
+            ResultSet resultSet = stmt.executeQuery("select * from t_calendar where no=" + calendar_no);
             while (resultSet.next()) {
                 calendarModel.setCalendar_no(resultSet.getInt(1));
                 calendarModel.setName(resultSet.getString(5));
@@ -87,26 +86,59 @@ public class CalendarService {
         notifyCalendarCreate();
     }
 
-    public void addCalendarServiceListener(CalendarServiceListener calendarServiceListener){
-        if(!calendarServiceListeners.contains(calendarServiceListener)) {
+    public void updateCalendar(int calendar_no, String name){
+        Connection conn = dbConnector.getConnection();
+        try {
+            String query = "update t_calendar SET name=? where no=?";
+            PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setString(1, name);
+            preparedStatement.setInt(2, calendar_no);
+            preparedStatement.executeUpdate();
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
+        notifyCalendarUpdate();
+    }
+
+    public void deleteCalendar(int calendar_no) {
+        Connection conn = dbConnector.getConnection();
+        try {
+            String query1 = "delete from t_event where calendar_no=?";
+            PreparedStatement preparedStatement1 = conn.prepareStatement(query1);
+            preparedStatement1.setInt(1, calendar_no);
+            preparedStatement1.executeUpdate();
+            String query2 = "delete from t_calendar where no=?";
+            PreparedStatement preparedStatement2 = conn.prepareStatement(query2);
+            preparedStatement2.setInt(1, calendar_no);
+            preparedStatement2.executeUpdate();
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
+        notifyCalendarDelete();
+    }
+
+    public void addCalendarServiceListener(CalendarServiceListener calendarServiceListener) {
+        if (!calendarServiceListeners.contains(calendarServiceListener)) {
             calendarServiceListeners.add(calendarServiceListener);
         }
     }
 
-    public void notifyCalendarCreate(){
-        for(CalendarServiceListener calendarServiceListener : calendarServiceListeners){
+    public void notifyCalendarCreate() {
+        for (CalendarServiceListener calendarServiceListener : calendarServiceListeners) {
             calendarServiceListener.onCalendarCreate();
         }
     }
 
-    public void notifyCalendarDelete(){
-        for(CalendarServiceListener calendarServiceListener : calendarServiceListeners){
+    public void notifyCalendarDelete() {
+        for (CalendarServiceListener calendarServiceListener : calendarServiceListeners) {
             calendarServiceListener.onCalendarDelete();
         }
     }
 
-    public void notifyCalendarUpdate(){
-        for(CalendarServiceListener calendarServiceListener : calendarServiceListeners){
+    public void notifyCalendarUpdate() {
+        for (CalendarServiceListener calendarServiceListener : calendarServiceListeners) {
             calendarServiceListener.onCalendarUpdate();
         }
     }

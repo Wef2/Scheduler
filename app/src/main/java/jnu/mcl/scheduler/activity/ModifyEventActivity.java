@@ -21,6 +21,7 @@ import jnu.mcl.scheduler.dialog.EventDateDialog;
 import jnu.mcl.scheduler.dialog.EventTimeDialog;
 import jnu.mcl.scheduler.model.CalendarModel;
 import jnu.mcl.scheduler.model.DateModel;
+import jnu.mcl.scheduler.model.EventModel;
 import jnu.mcl.scheduler.service.CalendarService;
 import jnu.mcl.scheduler.service.EventService;
 import jnu.mcl.scheduler.util.DateFormatUtil;
@@ -37,6 +38,7 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
     private String endYear, endMonth, endDay, endHour, endMinute;
 
     private CalendarModel calendarModel;
+    private EventModel eventModel;
     private String calendar_type;
     private int event_no;
     private String dtstart;
@@ -50,21 +52,6 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_add_event);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        calendarNameText = (TextView) findViewById(R.id.calendarNameText);
-        Intent intent = getIntent();
-        dtstart = intent.getStringExtra("dtstart");
-        dtend = intent.getStringExtra("dtend");
-
-        calendar_type = intent.getStringExtra("type");
-        if (calendar_type.equals("personal")) {
-
-        } else if (calendar_type.equals("share")) {
-            event_no = intent.getIntExtra("eventNo", 1);
-            calendar_no = intent.getIntExtra("calendarNo", calendar_no);
-            calendarModel = calendarService.getCalendar(calendar_no);
-            calendarNameText.setText(calendarModel.getName());
-        }
 
         confirmButton = (Button) findViewById(R.id.confirmButton);
         cancelButton = (Button) findViewById(R.id.cancelButton);
@@ -82,6 +69,23 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
         dtendDate.setOnClickListener(this);
         dtendTime.setOnClickListener(this);
 
+        calendarNameText = (TextView) findViewById(R.id.calendarNameText);
+        Intent intent = getIntent();
+
+        calendar_type = intent.getStringExtra("type");
+        if (calendar_type.equals("personal")) {
+
+        } else if (calendar_type.equals("share")) {
+            event_no = intent.getIntExtra("eventNo", 0);
+            calendar_no = intent.getIntExtra("calendarNo", calendar_no);
+            calendarModel = calendarService.getCalendar(calendar_no);
+            eventModel = eventService.getEvent(event_no);
+            eventTitleText.setText(eventModel.getTitle());
+            calendarNameText.setText(calendarModel.getName());
+            dtstart = eventModel.getDtstart();
+            dtend = eventModel.getDtend();
+        }
+
         DateModel startDateModel = DateFormatUtil.epochToModel(dtstart);
         DateModel endDateModel = DateFormatUtil.epochToModel(dtend);
 
@@ -97,6 +101,7 @@ public class ModifyEventActivity extends AppCompatActivity implements View.OnCli
         endHour = lengthCheck(endDateModel.getHour());
         endMinute = lengthCheck(endDateModel.getMinute());
         setStartTexts();
+        setEndTexts();
     }
 
     public void setStartTexts() {

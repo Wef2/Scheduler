@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.activity.EventListActivity;
 import jnu.mcl.scheduler.adapter.CalendarListAdapter;
-import jnu.mcl.scheduler.dialog.CalendarLongClickDialog;
+import jnu.mcl.scheduler.dialog.CustomLongClickDialog;
 import jnu.mcl.scheduler.handler.QueryHandler;
 import jnu.mcl.scheduler.listener.QueryListener;
 import jnu.mcl.scheduler.model.CalendarModel;
@@ -33,6 +33,8 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
     private ArrayList<CalendarModel> personalCalendarList = new ArrayList<CalendarModel>();
     private CalendarListAdapter personalCalendarListAdapter;
     private ListView personalCalendarListView;
+
+    private CustomLongClickDialog customLongClickDialog;
 
     public PersonalCalendarFragment() {
     }
@@ -62,11 +64,12 @@ public class PersonalCalendarFragment extends Fragment implements QueryListener 
         personalCalendarListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                CalendarLongClickDialog calendarLongClickDialog = new CalendarLongClickDialog(getContext());
-                calendarLongClickDialog.show();
+                customLongClickDialog.show();
                 return true;
             }
         });
+        customLongClickDialog = new CustomLongClickDialog(getContext());
+
         queryHandler = new QueryHandler(getContext(), this);
         queryHandler.startQuery(1, null, queryModel.getCalendarUri(), queryModel.getCalendarProjection(), null, null, null);
 

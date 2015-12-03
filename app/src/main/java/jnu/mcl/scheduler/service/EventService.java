@@ -75,6 +75,29 @@ public class EventService {
         return eventList;
     }
 
+    public ArrayList<EventModel> getTodayEventList(Long now, Long todayEnd) {
+        Connection conn = dbConnector.getConnection();
+        ArrayList<EventModel> eventList = new ArrayList<EventModel>();
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet resultSet = stmt.executeQuery("select * from t_event dtstart order by dtstart asc");
+            while (resultSet.next()) {
+                if(Long.parseLong(resultSet.getString(5)) >= now &&Long.parseLong(resultSet.getString(4)) <= todayEnd) {
+                    EventModel eventModel = new EventModel();
+                    eventModel.setEvent_no(resultSet.getInt(1));
+                    eventModel.setTitle(resultSet.getString(3));
+                    eventModel.setDtstart(resultSet.getString(4));
+                    eventModel.setDtend(resultSet.getString(5));
+                    eventList.add(eventModel);
+                }
+            }
+            conn.close();
+        } catch (Exception e) {
+            Log.w("Error connection", e);
+        }
+        return eventList;
+    }
+
 
     public EventModel getEvent(int event_no) {
         Connection conn = dbConnector.getConnection();
@@ -131,11 +154,12 @@ public class EventService {
     public void updateEvent(int event_no, String title, String dtstart, String dtend){
         Connection conn = dbConnector.getConnection();
         try {
-            String query = "update t_event SET "+"title="+title+",dstart="+dtstart+",dtend="+dtend+" where event_no="+event_no;
+            String query = "update t_event SET title=?, dtstart=?, dtend=? where event_no=?";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
             preparedStatement.setString(1, title);
             preparedStatement.setString(2, dtstart);
             preparedStatement.setString(3, dtend);
+            preparedStatement.setInt(4, event_no);
             preparedStatement.executeUpdate();
             conn.close();
         } catch (Exception e) {
@@ -147,8 +171,9 @@ public class EventService {
     public void deleteEvent(int event_no){
         Connection conn = dbConnector.getConnection();
         try {
-            String query = "delete from t_event where event_no="+event_no;
+            String query = "delete from t_event where event_no=?";
             PreparedStatement preparedStatement = conn.prepareStatement(query);
+            preparedStatement.setInt(1, event_no);
             preparedStatement.executeUpdate();
             conn.close();
         } catch (Exception e) {

@@ -55,10 +55,24 @@ public class EventInformationActivity extends AppCompatActivity implements Event
             }
         });
 
+        Intent intent = getIntent();
+        calendar_type = intent.getStringExtra("type");
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent(EventInformationActivity.this, ModifyEventActivity.class);
+                if (calendar_type.equals("personal")) {
+                    intent.putExtra("type", "personal");
+
+                } else if (calendar_type.equals("share")) {
+                    intent.putExtra("type", "share");
+                    intent.putExtra("calendarNo", calendar_no);
+                    intent.putExtra("eventNo", eventModel.getEvent_no());
+                }
+                startActivity(intent);
+                finish();
             }
         });
 
@@ -67,8 +81,6 @@ public class EventInformationActivity extends AppCompatActivity implements Event
         dtstartText = (TextView) findViewById(R.id.dtstartText);
         dtendText = (TextView) findViewById(R.id.dtendText);
 
-        Intent intent = getIntent();
-        calendar_type = intent.getStringExtra("type");
         if (calendar_type.equals("personal")) {
             event_id = intent.getStringExtra("eventId");
             queryHandler = new QueryHandler(EventInformationActivity.this, this);

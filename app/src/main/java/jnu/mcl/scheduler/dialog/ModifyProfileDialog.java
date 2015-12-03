@@ -44,18 +44,15 @@ public class ModifyProfileDialog extends Dialog implements View.OnClickListener 
 
     @Override
     public void onClick(View v) {
-        Log.w("Test", "Test");
         if (v == confirmButton) {
             if(getDescriptionLength() > 0 && getNicknameLength() > 0) {
                 userService.updateUser(id, getNickname(), getDescription());
-                Log.w("Test1", "Test1");
                 dismiss();
             }
             else{
                 Toast.makeText(context, "내용을 입력해주세요.",Toast.LENGTH_SHORT).show();
             }
         } else if (v == cancelButton) {
-            Log.w("Test2", "Test2");
             dismiss();
         }
     }

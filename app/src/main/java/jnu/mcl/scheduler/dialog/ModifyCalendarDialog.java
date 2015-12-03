@@ -12,9 +12,9 @@ import jnu.mcl.scheduler.R;
 import jnu.mcl.scheduler.service.CalendarService;
 
 /**
- * Created by 김 on 2015-11-28.
+ * Created by Kim on 2015-12-03.
  */
-public class AddCalendarDialog extends Dialog implements View.OnClickListener {
+public class ModifyCalendarDialog extends Dialog implements View.OnClickListener  {
 
     private CalendarService calendarService = CalendarService.getInstance();
 
@@ -24,10 +24,12 @@ public class AddCalendarDialog extends Dialog implements View.OnClickListener {
     private Context context;
 
     private String name;
+    private int calendar_no;
 
-    public AddCalendarDialog(Context context) {
+    public ModifyCalendarDialog(Context context, int calendar_no) {
         super(context);
         this.context = context;
+        this.calendar_no = calendar_no;
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.dialog_calendar);
 
@@ -53,8 +55,8 @@ public class AddCalendarDialog extends Dialog implements View.OnClickListener {
             String toastMessage;
             name = getName();
             if (getNameLength() > 0) {
-                calendarService.addCalendar(name, name, name, name);
-                toastMessage = name + " 캘린더가 생성되었습니다.";
+                calendarService.updateCalendar(calendar_no, name);
+                toastMessage = "캘린더가 수정되었습니다.";
             } else {
                 toastMessage = "입력해주세요";
             }

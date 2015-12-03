@@ -24,12 +24,14 @@ public class DateFormatUtil {
     }
 
     public static DateModel epochToModel(String epoch){
+        String parsedString = utcToLocal(epoch);
+
         DateModel dateModel = new DateModel();
-        dateModel.setYear(Integer.parseInt(epoch.substring(0,4)));
-        dateModel.setMonth(Integer.parseInt(epoch.substring(5,7)));
-        dateModel.setDay(Integer.parseInt(epoch.substring(8,10)));
-        dateModel.setHour(Integer.parseInt(epoch.substring(11,13)));
-        dateModel.setMinute(Integer.parseInt(epoch.substring(14,16)));
+        dateModel.setYear(Integer.parseInt(parsedString.substring(0, 4)));
+        dateModel.setMonth(Integer.parseInt(parsedString.substring(5, 7)));
+        dateModel.setDay(Integer.parseInt(parsedString.substring(8,10)));
+        dateModel.setHour(Integer.parseInt(parsedString.substring(11,13)));
+        dateModel.setMinute(Integer.parseInt(parsedString.substring(14,16)));
         return dateModel;
     }
 
@@ -39,7 +41,6 @@ public class DateFormatUtil {
         Date date = null;
         try {
             date = df.parse(str);
-            Log.w("Test", "Test");
         } catch (ParseException e) {
             e.printStackTrace();
         }

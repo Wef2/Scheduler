@@ -81,14 +81,14 @@ public class AddEventActivity extends AppCompatActivity implements View.OnClickL
         startYear = Integer.toString(calendar.get(Calendar.YEAR));
         startMonth = lengthCheck(calendar.get(Calendar.MONTH) + 1);
         startDay = lengthCheck(calendar.get(Calendar.DAY_OF_MONTH));
-        startHour = lengthCheck(calendar.get(Calendar.HOUR));
+        startHour = lengthCheck(calendar.get(Calendar.HOUR_OF_DAY));
         startMinute = lengthCheck(calendar.get(Calendar.MINUTE));
         setStartTexts();
 
         endYear = lengthCheck(calendar.get(Calendar.YEAR));
         endMonth = lengthCheck(calendar.get(Calendar.MONTH) + 1);
         endDay = lengthCheck(calendar.get(Calendar.DAY_OF_MONTH));
-        endHour = lengthCheck(calendar.get(Calendar.HOUR));
+        endHour = lengthCheck(calendar.get(Calendar.HOUR_OF_DAY));
         endMinute = lengthCheck(calendar.get(Calendar.MINUTE));
         setEndTexts();
     }
